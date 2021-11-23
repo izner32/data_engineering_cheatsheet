@@ -1,0 +1,166 @@
+// LESSON 1.1 - INTRO TO SPARK 
+spark's feature 
+    - lazy evaluation: use actions to execute transformations 
+    - fault tolerance: capability of handling if any loss occurs or in other words If any bug or loss found, RDD has the capability to recover the loss
+        - remember rdd is a spark's core, from which every spark's functionality is built from 
+    - parallelization: divides task into multiple worker nodes that executes the task 
+
+spark's ecosystem components 
+    - spark core: all functionalities being provided by spark is built on top of the spark core | it delivers speed by providing in-memory computation capability.
+        - rdd: for data processing 
+            - transformations: like functions, it does something to the rdd 
+            - actions: execute transformations 
+    - spark sql
+        - dataframe: for data processing, can use sql on dataframe and treat them as if they are rdbms' table 
+        - dataset: extension of dataframe 
+    - spark streaming (NOT RECOMMENDED, USE KAFKA, NO REASON YET )
+        - micro-batching: stream sequences of small batches of data 
+    - spark mllib (NOT RECOMMENDED, FOR SIMPLE ML ALGORTHIMS USE SCIKIT LEARN, FOR COMPLEX SUCH AS DEEP LEARNING USE TENSORFLOW)
+        - not comprehensive enough
+        - only contains simple ml algorithms 
+    - spark graphx: for graphs and graph parallel execution 
+        - clustering, classification, traversal, searching, and pathfinding is also possible in graphs
+    - sparkr: for running r on spark, r is a programming langauge used for data analysis 
+
+understanding how spark achieves parallelization 
+driver program(spark context): runs on the main() function 
+    -> cluster manager(spark driver) 
+        -> worker node 1 
+            - executor: responsible for running the task 
+                - task1 
+                - task2 
+            - cache 
+        -> worker node 2
+            - executor: responsible for running the task  
+                - task1 
+                - task2 
+            - cache
+
+where should we keep our focus on with spark? | answer: spark's data processing(streaming not included)
+- spark core(rdd) 
+- spark sql(dataframe(MOSTLY THIS) and dataset)
+
+// LESSON 1.2 - SPARK'S RDD VS DATAFRAME VS DATASETS: these are all for data processing  
+three of them
+    - supports processing structured and unstructured data 
+    - supports file formats like text file, csv, json, and parquet file formats 
+    - supports accessing data from different data sources like rdbms(sql), hdfs, or nosql databases 
+    - immutable 
+    - lazily evaluated: the execution of transformation will not start until an action is triggered 
+        - why is this good? 
+            - without lazy evaluation: transform -> copy data -> transform -> copy data -> transform -> copy data - this wastes alot of memory 
+            - with lazy evaluation: transform -> transform -> transform -> transform -> grab data - does not waste memory unlike the approach above 
+rdd: offers low level abstraction
+    - distributed collection of elements 
+    - compile time type safety: compiler know the columns and the data type of the column whether it's long, string, etc. 
+    - api's or methods such as agg,select,sum,avg,etc. is not available
+    - cannot write sql queries 
+    - no catalyst optimizer 
+    - no tungsten component
+    - no advanced encoders 
+dataframe: offers high level abstraction | similar to rdbms' table 
+    - organized into named columns 
+    - not compile time type safety 
+    - api's or methods such as agg,select,sum,avg,etc. is available
+    - can write sql queries: e.g. SELECT column FROM table 
+    - has catalyst optimizer: improves performance of the queries
+    - has tungsten component: enables storing data in off-heap memory in binary format   
+        - avoids garbage collection by storing in off heap memory 
+        - occupies less space 
+        - avoids expensive java serialization
+    - no advanced encoders 
+dataset: offers high level abstraction (available only in java and scala)
+    - extension of dataframe 
+    - compile time type safety: compiler know the columns and the data type of the column whether it's long, string, etc.
+    - api's or methods such as agg,select,sum,avg,etc. is available
+    - can write sql queries: e.g. SELECT column FROM table  
+    - has catalyst optimizer: improves performance of the queries 
+    - has tungsten component: enables storing data in off-heap memory in binary format 
+        - avoids garbage collection by storing in off heap memory 
+        - occupies less space 
+        - avoids expensive java serialization
+    - has advanced encoders 
+
+CONCLUSION: for low level transformations use rdd, for high level use dataframe 
+
+// LESSON 1.3 - PANDAS DATAFRAME VS SPARK DATAFRAME 
+sparks dataframe 
+    - immutable: cannot be modified after it's created  
+    - supports parallelization: data is being processed parallely meaning the task is divided into different nodes(can be driver node or worker node)
+    - has multiple nodes: this is how pretty much parallelization is achieved  
+    - follows lazy execution which means that a task is not executed until an action is performed 
+    - complex operations are difficult to perform compared to pandas 
+    - spark DataFrame is distributed and hence processing in the Spark DataFrame is faster for a large amount of data: in other words parallelization 
+    - excellent for building a scalable application 
+    - assures fault tolerance: capable of handling if any loss occurs  
+pandas dataframe 
+    - mutable: dataframes can be modified 
+    - does not support parallelization 
+    - has single node 
+    - follows eager execution which means task is executed immediately, technically not good since at every task executed data is being copied thus wastage of memory 
+    - complex operations are easier to perform compared to sparks dataframe 
+    - pandas DataFrame is not distributed and hence processing in the Pandas DataFrame will be slower for a large amount of data.
+    - can't be used to build a scalable application 
+    - does not assure fault tolerance, we need to implement our own framework to assure it 
+
+CONCLUSION
+    - for small data use pandas, for big data use spark because it has lazy evaluation, and supports parallelization 
+    - for scalable applications use spark, for non scalable use pandas 
+
+// LESSON 2.1 - INTRO TO RDD
+rdd 
+    - rdd's are for low level data processing but has lesser features than dataframe/dataset 
+    - cannot run sql queries 
+
+creating an rdd from a collection(array,etc.)
+    # linking with spark 
+    from pyspark import SparkContext, SparkConf
+
+    # initializing spark 
+    conf = SparkConf().setAppName(appName).setMaster(master)
+    sc = SparkContext(conf=conf)
+
+    # parallelizing data(creating an rdd)
+    # elements of the collection are copied to form a distributed dataset that can be operated on in parallel 
+    data = [1, 2, 3, 4, 5]
+    distData = sc.parallelize(data) # we can now operate parallely on this data, e.g. distData.reduce(lambda a, b: a + b) | reduce applies to every single element of the array 
+
+creating an rdd from a different file 
+    # pyspark can create distributed datasets from any storage source supported by Hadoop, including your local file system, HDFS, Cassandra, HBase, Amazon S3, etc. Spark supports text files, SequenceFiles, and any other Hadoop InputFormat.
+    # creating a csv file rdd 
+    distFile = sc.textFile("sample_data\\data.csv") # yep, use double backslash 
+
+operation: transformation and action + persist 
+    # transformations - create a new dataset from an existing one and modify the newly created dataset but do not execute yet unless an action is called 
+    # action - to execute the transformation, returns a new rdd as a result 
+    # performing actions - never mind what it does, we're only focused here in saying that the csv is now an rdd thus we can perform operations(transformations/actions)
+    distFile.map(lambda s: len(s)).reduce(lambda a, b: a + b)
+
+    # below is an example to understand the basics of rdd operations 
+    lines = sc.textFile("data.txt") 
+    lineLengths = lines.map(lambda s: len(s)) # transformation - not immediately run because of lazy evaluation 
+    totalLength = lineLengths.reduce(lambda a, b: a + b) # action - at this point Spark breaks the computation into tasks to run on separate machines, and each machine runs both its part of the map and a local reduction, returning only its answer to the driver program 
+    # now that the lineLengths has been executed because of the action, to make use of it again like it was never executed(action has been run) then use persists
+    lineLengths.persist() 
+
+    
+
+// LESSON 2.2 - TRANSFORMATIONS 
+# map(func) - return a new distributed dataset formed by passing each element of the source through a function func 
+# filter(func) - retuns a new dataset formed by selecting those elements of the source on which func returns true 
+
+// LESSON X.2.3 - ACTIONS 
+
+
+# passing functions to spark 
+
+# understanding closures 
+
+# working with key-value pairs 
+
+// LESSON 3.1 - INTRO TO DATAFRAMEs
+dataframe 
+    - dataframe's are for high level data processing and has more features than rdd 
+    - can run sql queries 
+
+

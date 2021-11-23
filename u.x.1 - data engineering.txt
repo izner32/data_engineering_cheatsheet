@@ -1,0 +1,88 @@
+// LESSON 1.0 - INTRO TO DATA ENGINEERING 
+
+
+// LESSON 1.1 - DATA ENGINEERING FLOW (HIGH LEVEL)
+operational database (oltp): database to keep the business running  
+    - understanding business
+    - entity relationship data model(how tables relate to each other) 
+    - relational data model(describing constraints and datatypes of column) 
+    - insert values 
+    - relational database design(remove anomalies by performing normalization) 
+data warehousing(olap): database for analytical queries 
+    - sources(usually oltp)
+    - etl -> staging area 
+    - etl -> data warehouse 
+    - etl -> data marts
+    - etl -> analysis
+
+// LESSON 1.2 - DATA ENGINEERING FLOW (LOW LEVEL)
+
+// LESSON 1.3 - CONCEPTS 
+- testing in python 
+- data warehousing 
+- data lakes 
+- database design 
+    - data modeling 
+- exploratory data analysis 
+- dbms
+    - normalization 
+    - keys 
+- etl/elt/el 
+- data processing 
+    - batch 
+    - streaming 
+- sql/nosql 
+    - rdbms 
+    - document/key-value/columnar/graph - nosql databases 
+- cloud computing(ec2,s3,redshift,iam)
+
+
+// LESSON 1.4 - TOOLS ('-' represents the tools i use) 
+web scraping 
+    - python 
+    - selenium 
+    - beautifulsoup 
+data engineering 
+    etl 
+
+    data processing 
+        small data 
+            - pandas 
+            - awk 
+        big data 
+            batch 
+            hybrid 
+                - apache spark 
+            streaming 
+                - apache kafka 
+    data lake 
+        cloud 
+            - aws s3 
+    data warehousing 
+        cloud 
+            - aws redshift: built on top of postgresql 
+        non-cloud 
+            - postgresql (RDBMS) 
+            - cassandra (NoSQL - columnar)
+            - mongodb (NoSQL - document)
+            - redis (NoSQL - redis)
+    data orchestration 
+        - airflow 
+    version control
+        - git 
+    iac (infrastructure as code)
+        container 
+            - docker 
+        container orchestration 
+            - kubernetes 
+        infrastructuve provisioning 
+            - terraform 
+    ci/cd 
+        - github actions 
+    other tools 
+        - python: main programming langauge i use for data engineering 
+        - aws iam: user and aws services access management 
+        - matplotlib(data visualization): for creating charts,graph,etc.
+        - numpy(alternative to array): much better version of array 
+        - scikit-learn: for simple machine learning algorithms 
+        - tensorflow: for complex machine learning algorithms such as deep learning 

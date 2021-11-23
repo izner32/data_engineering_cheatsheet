@@ -1,0 +1,141 @@
+// LESSON 1.1 - INTRO TO DBMS 
+dbms definition 
+    - refers to the technology of storing and retrieving users data with utmost efficiency along with appropriate security measures 
+dbms architecture 
+    1 tier architecture: dbms is the only entity where the user directly sis on the dbms and uses it - any changes done here will directly be done on the dbms itself  
+    2 tier architecture: it has an application through which the dbms can be accessed - the application tier is entirely independent of the database in terms of operation, design and programming 
+    3 tier architecture: most widely used architecture to design a dbms 
+        presentation tier | application tier | database tier 
+            (user) presentation tier: end user operate on this tier and they know nothing about any existence of the database beyond this layer 
+            application (middle) tier: reside the application server and the programs the access the database 
+            database (data) tier: db resides along with its query processing langauge 
+data models: defines how the logical structure of a database is modeled | there are more of these but we'll only focus with relational, entity-relationship and flat 
+    entity-relationship data model(multiple tables - high level concept | conceptual): best used for the conceptual design of a database  
+        entities - tables
+        attribute - columns
+        relationships among entities: how entities is connected with other entities 
+            - one to one 
+            - one to many 
+            - many to one 
+            - many to many 
+    relational data model(table - low level concept | logical): data is stored in tables called relations 
+        columns - attribute 
+        tuple - rows 
+        table - relation 
+    flat data model: old data model that's really not good nowadays but still widely used in a lot of place so i decided to add them 
+        - simple model in which the databse is represented as a table consisting of rows and columns
+        - to access any data, the computer has to read the entire table, which is very inefficient and slow 
+
+    data modeling (database/oltp) workflow 
+        understanding business -> entity relationship data model(how tables relate to each other) -> relational data model(describing constraints and datatypes of column) -> insert values -> relational database design(remove anomalies by performing normalization) 
+database schema: skeleton structure that represents the logical view of the entire database | format on how the data should look like 
+    example 
+        column_name - primary key(constraint) | integer (datatype)
+        column_name2 - not null(constraint) | varchar (datatype)
+metadata: set of data that describes and gives information about other data 
+    example 
+        subject: me 
+        metadata: 
+            - race: human 
+            - age: 20 
+
+// LESSON 1.2 - ENTITY RELATIONSHIP MODEL 
+er concepts 
+    entity (tables): - can be a real world object, that can be easily identifiable, e.g. students, teachers, classes, etc. - all these entities have some attributes that give them their identity 
+    attributes: properties of an entity, it has values, e.g. name, class, age, etc. 
+        - simple attribute: atomic values which cannot be divided further, e.g. student's phone number is an atomic value of 10 digits  
+        - composite attribute: more than one simple attribute, e.g. students name which is made up of first_name and last_name 
+        - derived attribute: values are derived from other attributes present in the database, e.g. age which can be derived from date_of_birth
+        - single-value attribute: contain single value, e.g. social_security_number 
+        - multi-value attribute: multi value attributes may contain more than one values, e.g. person can have multiple email_address
+        - these attributes can come together, e.g. simple single-valued attributes 
+    relationship: association among entities 
+        mapping constraints 
+            - one to one 
+            - one to many 
+            - many to one 
+            - many to many 
+generalization: bottom up approach in which two or more entities of lower level combine to form a higher level entity  
+specialization: top down approach, one higher level entity can be broken down into two lower level entities  
+aggregation: relation between two entities is treated as a single entity, e.g. in the real world, if a visitor visits a coaching center then he will never enquiry about the Course only or just about the Center instead he will ask the enquiry about both 
+er diagram representation (symbols used)
+    entity - rectangle 
+    attribute - ellipse 
+    relationship - line | 1 for one, M for many 
+    generalization/specialization - diamond that has the word "is a" inside 
+example of er diagram(conceptual) turned into a table model
+    er diagram: https://static.javatpoint.com/dbms/images/dbms-reduction-of-er-diagram-into-table.png
+    er turned into table model: https://static.javatpoint.com/dbms/images/dbms-reduction-of-er-diagram-into-table2.png
+
+note: we could always skip er diagram and just proceed to table diagram just like the example above 
+
+// UNFINISHED - LESSON 1.3 - RELATIONAL MODEL 
+rm concepts 
+    relation: tables 
+    tuples: row 
+    attributes: column 
+    domain: atomic value allowed for an attribute | e.g. name, employee_age(values between 20-70 years)
+    schema: format of table - contains columns with their cosntraints and data types
+    cardinality: number of tuples/rows present in a relation/table  
+keys: identify only the primary key and foreign key from the attribute/columns
+    primary keys: uniquely identifies every row in that table | e.g. { stud_id }
+    foreign keys: creates relationship between two tables, allow navigation between two different instance of an entity. This is the primary key from a different table that is in your current table. | e.g. table1(other) - {stud_id}, table2(current) - {stud_id}
+    composite keys: key that consists of two or more attributes that uniquely identify any row in the table | e.g. { cust_id, product_code }
+    candidate keys:  unique and no repeating values just like primary key. A field that can uniquely identify a row | e.g. {stud_id}, {roll_no}, {email} - these single fields alone can identify a unique row 
+    super keys: group of single or multiple keys which can identify rows in a table | e.g. { emp_ssn } - this column alone can identify the row, { emp_id } - this column alone can identify the row, { emp_ssn,emp_id } - these two columns alone can idenfity a row, etc. 
+    alternate keys: Remaining candidate key after primary key is chosen. | e.g. let's say there are three candidate keys:{stud_id,roll_no,email} then {stud_id} was chosen as primary key therefore {roll_no,email} becomes the alternate key 
+    compound keys: has two or more foreign keys in your current table which could be used to uniquely identify a row | e.g. {student_id} and {course_id} are primary key in other table but is a foreign key in our current table, we could combine these two fields {student_id,course_id} to form a compound key 
+    surrogate keys: an artificial or non natural key which aims to uniquely identify each record is called a surrogate key, pretty much like priamry except its system generated | e.g. 12asdfq23h
+constraint: limitations of a column 
+datatypes: what values to store in a column 
+    
+// UNFINISHED - LESSON 1.4 - RELATIONAL DATABASE DESIGN 
+normalization: method to remove all these anomalies(update, delete, insert anomalies) and bring the database to a consistent state 
+    1NF: no multi value attribute 
+        - states that an attribute of a table cannot hold multiple values. It must hold only single-valued attribute
+        - first normal form disallows the multi-valued attribute, composite attribute, and their combinations
+    2NF: all non key attribute must only be dependent on one primary key, all non key attribute cannot be in multiple primary key  
+        - in the second normal form, all non-key attributes are fully functional dependent on the primary key
+        - in other words, every non key attribute can only belong to one primary key, non key attribute cannot belong to multiple primary key 
+        
+        functional dependancy: an attribute only belongs to one attribute 
+    3NF: non key attribute cannot be derived from other non key attribute (everything we're saying belongs to one table only)
+        - must not contain any transitive dependency 
+        - used to reduce data duplication, also used to achieve the data integrity 
+        - if there is no transitive dependency for non-prime attributes, then the relation must be in third normal form already 
+    
+        transitive dependency: when a non key attribute determines another attribute | when a non prime key column value can be guessed or taken from other non key column | e.g. if we know the book then we know the author 
+    BCNF(4NF)
+        - normalization form at this point and above is rarely used 
+        - advance version of 3NF
+    5NF 
+    6NF
+join: determine how different tables shall be joined while performing normalization | remember in normalization we break them down into multiple tables to protect data consistency and integrity 
+
+// UNFINISHED - LESSON 1.5 - STORAGE AND FILE STRUCTURE 
+storage system 
+file structure 
+
+// LESSON 1.6 - INDEXING AND HASHING: both are for making queries a bit faster 
+indexing: data structure technique to efficiently retrieve records from the database files based on some attributes on which the indexing has been done
+    - its main purpose is to provide basis for both rapid random lookups and efficient access of ordered records.
+hashing: is an effective technique to calculate the direct location of a data record on the disk without using index structure 
+    - its main purpose is to use math problem to organize data into easily searchable buckets
+
+// LESSON 1.7 - TRANSACTION AND CONCURRENCY 
+transaction: group of task, a single task is the minimum processing unit which cannot be divided further | you could think of task as a query which access data using read and write operations 
+    transaction must maintain acid 
+        atomicity: transaction must be treated as an atomic unit, that is , either all of tis operations are executed or none. 
+        consistency: database must remain in a consistent state after any transaction. 
+        durability: the database should be durable enough to hold all its latest updates even if the system fails or restarts
+        isolation: in a database system where more than one transaction are being executed simultaneously and in parallel, the property of isolation states that all the transactions will be carried out and executed as if it is the only transaction in the system 
+concurrency: transaction executing in parallel 
+deadlock 
+    - an unwanted situation in which two or more transactions are waiting indefinitely for one another to give up locks
+    - deadlock is said to be one of the most feared complications in DBMS as it brings the whole system to a Halt
+
+    example 
+        - suppose, Transaction T1 holds a lock on some rows in the Students table and needs to update some rows in the Grades table. Simultaneously, Transaction T2 holds locks on those very rows (Which T1 needs to update) in the Grades table but needs to update the rows in the Student table held by Transaction T1
+        - now, the main problem arises. Transaction T1 will wait for transaction T2 to give up the lock, and similarly, transaction T2 will wait for transaction T1 to give up the lock. As a consequence, All activity comes to a halt and remains at a standstill forever unless the DBMS detects the deadlock and aborts one of the transactions. 
+
+// UNFINISHED - LESSON 1.8 - BACKUP AND RECOVERY 

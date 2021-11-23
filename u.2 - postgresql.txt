@@ -1,0 +1,473 @@
+// LESSON 1.0 - INTRO TO POSTGRESQL 
+RDBMS data architecture 
+    database 
+        - schema(namespace) 
+            - views 
+            - indexes 
+            - sequences 
+            - table 
+                - column 
+                    - rows 
+
+postgresql hierarchy of clause 
+    SELECT 
+    FROM 
+    JOIN 
+    ON 
+    WHERE 
+    GROUP BY 
+    ORDER BY 
+    LIMIT 
+
+tips: 
+    - at any place where we could specify values, we could also do subquery with it 
+        - e.g. INSERT INTO (value) or INSERT INTO (subquery) - you get what i mean 
+
+// LESSON 1.1 - DATABASE 
+create database 
+    CREATE DATABASE db_name 
+    OWNER = role_name // e.g. admin 
+    TEMPLATE = template 
+    ENCODING = encoding 
+    LC_COLLATE = collate // used to define the sort order of strings that mark the result of the order by clause if we are using a select statement 
+    LC_CTYPE = ctype // used to display the character classification for the new database 
+    TABLESPACE = tablespace_name // used to define the tablespace name for the new database, and by default, it is the template database's tablespace 
+    CONNECTION LIMIT = max_concurrent_connection; // used to define the maximum parallel connections of a new database, and by default, it is -1 (unlimited )
+
+    // or a very generic database 
+    CREATE DATABASE db_name;
+drop database 
+    DROP DATABASE db_name; // DROP DATABASE [IF EXISTS] db_name
+
+// UNFINISHED LAST 4 - LESSON 1.2 - TABLE 
+create table
+    CREATE TABLE table_name(    
+        column1 INT PRIMARY KEY, // column_name datatype constraint
+        column2 INT,    
+        column3 datatype,    
+    );    
+drop table: removing table  
+    DROP TABLE table_name;
+show table: show list of table  
+    in psql
+        \dt 
+describe table: show column, datatypes, indexes, collation, nullable, and default  
+    in psql 
+        \d table_name 
+alter table: modify table thru adding columns/renaming columns/dropping columns/adding constraint to a column, etc.  
+add column 
+    ALTER TABLE table_name 
+    ADD COLUMN column_name REAL; // ADD COLUMN new_column datatype constraint
+drop column: removing column 
+    ALTER TABLE table_name 
+    DROP COLUMN column_name;
+
+    dropping column only if it exists 
+        ALTER TABLE table_name 
+        DROP COLUMN IF EXISTS column_name; 
+change column datatype 
+    ALTER TABLE table_name  
+    ALTER COLUMN column_name TYPE VARCHAR; // ALTER COLUMN column_name TYPE new_data_type
+rename column
+    ALTER TABLE table_name   
+    RENAME COLUMN column_name TO new_column_name;  
+truncate table: delete all records(row) from huge tables quickly | faster than DELETE command 
+    // remove all data from one table 
+    TRUNCATE TABLE table_name 
+    
+    // adding specific conditions 
+    TRUNCATE TABLE table_name parameter; // parameters -  [ RESTART IDENTITY | CONTINUE IDENTITY ] [ CASCADE | RESTRICT ]  
+create temporary table: temp table exist solely for storing data within a session, when you log out it will not be there when you log back in  
+    CREATE TEMPORARY TABLE temp_table_name(
+        column1 INT PRIMARY KEY // column_name datatype constraint
+        column2 VARCHAR
+    );
+column alias: the result of the query would show the alias as the name of the column 
+    SELECT column_name AS alias_name 
+    FROM table_name 
+sequence: generator used to create a progressive number  
+identity column 
+upsert 
+subquery
+
+// UNFINISHED - LAST 6 - LESSON 1.3 - DATATYPES 
+// kinds of datatypes 
+    Numeric: store numbers 
+    Character: store character 
+    Text: store infinite characters 
+    Varchar: store specified number of characters 
+    Boolean: store true or false 
+
+CREATE TABLE table_name(
+    SmallInt SMALLINT // 2 bytes | -32768 to +32767
+    Integer  INTEGER // 4 bytes | -2147483648 to +2147483647
+    BigInt BIGINT // 8 bytes | -9223372036854775808 to 9223372036854775807
+    SmallSerial SMALLSERIAL // 2 bytes | 1 to 32767
+    Serial SERIAL // 4 bytes | 1 to 2147483647
+    Big Serial BIGSERIAL // 8 bytes | 1 to 9223372036854775807
+    Date DATE // 4 bytes | 1000-01-01 to 9999-12-31 | yy-mm-dd
+    Time TIME // 8 bytes | 00:00:00 to 24:00:00 | hh:mm:ss
+    Timestamp TIMESTAMP // 8 bytes | e.g. 2016-06-22 19:10:25-07 | timestamp without time zone 
+    Timestamptz TIMESTAMPTZ // 8 bytes | e.g. 2016-06-22 19:10:25-07 | timestamp with time zone 
+    Interval 
+    UUID 
+    Json 
+    Hstore
+    Array
+)
+
+// set time zone for timestamptz 
+SET timezone = "America/Los_Angeles";
+SHOW TIMEZONE; 
+
+// user defined datatype 
+
+// LESSON 1.4 - SCHEMA 
+create schema 
+    CREATE SCHEMA schema_name; 
+
+    CREATE SCHEMA IF NOT EXISTS schema_name;
+drop schema: remove schema 
+    DROP SCHEMA schema_name;  
+  
+    // cascade - remove schema and all the objects(tables,functions,etc.) that rely on those objects 
+    // restrict - refuse to drop the schema if it contains any object, this is the default 
+    DROP SCHEMA [IF EXISTS] schema_name [ CASCADE | RESTRICT ];  
+alter schema: modify schema such as changing schema's name, etc. 
+    rename schema 
+        ALTER SCHEMA schema_name 
+        RENAME TO new_schema_name;
+    change owner of schema 
+        ALTER SCHEMA schema_name 
+        OWNER TO { new_owner | CURRENT_USER | SESSION_USER };
+
+// LESSON 1.5 - QUERIES 
+insert: insert values into tables 
+    inserting values you know
+        INSERT INTO table_name(
+            column1, column2, column3
+        ) VALUES ("value1", "value2", "value3");
+
+    inserting with values that's from a table 
+        INSERT INTO table_name(
+            column1, column2, column3
+        ) 
+        SELECT value1, value2, value3 
+        FROM another_table_name 
+        WHERE x = 1;
+select: select specified columns
+    SELECT column1, column2, SUM(column3) AS column3_sum // select columns 1 and 2, do aggregate functions to column3 
+    FROM table_name; 
+update: for obviously updating a column/multiple columns/row/rows  
+    single row, single column update 
+        UPDATE table_name    
+        SET column_name = value1 
+        WHERE id = 2011; 
+    single row, multiple column update 
+        UPDATE table_name 
+        SET column_name = 1 
+            column_name2 = 2 
+        WHERE id = 2021; 
+delete 
+    DELETE FROM table_name 
+    WHERE x = 1; // WHERE condition 
+
+// LESSON 1.6 - CLAUSE 
+where: select only rows that matches the condition 
+    SELECT column_name
+    FROM table_name 
+    WHERE id = 1;
+order by: set whether the order of data within a specified column is ascending or descending 
+    SELECT column_name, column_name2 
+    FROM table_name 
+    WHERE id = 1
+    ORDER BY column_name DESC // DEFAULT IS ASC - ascending 
+group by: group rows that has the same values | often go hand in hand with aggregate functions 
+    SELECT column_name 
+    FROM table_name 
+    GROUP BY column_name; 
+
+    common aggregate functions: finding value(sum,max,min,etc.) of grouped data  
+        avg
+        count 
+        every 
+        max 
+        min 
+        sum 
+
+    using group by with aggregate functions - i mean the only purpose of group by is for aggregate functions 
+        SELECT column_name, SUM(column_name)
+        FROM table_name 
+        GROUP BY column_name 
+having: used to specify a search condition for a group of rows | used with aggregate functions | parang where clause pero for aggregate functions 
+    SELECT column_name, SUM(column_name) 
+    FROM table_name, table_name2 
+    GROUP BY column_name 
+    HAVING SUM(column_name) > 5;
+distinct: get only a unique record from the specified column 
+    // select only unique record from a single column 
+    SELECT DISTINCT column_name 
+    FROM table_name 
+
+    // select only unique records based on multiple column 
+    SELECT DISTINCT column_name, column_name2 
+    FROM table_name 
+
+    // select only unique record from a single column, but also select other columns 
+    SELECT DISTINCT ON (column_name), column_name2 
+    FROM table_name 
+limit: select only a specified number of rows 
+    SELECT column_name 
+    FROM table_name 
+    LIMIT 5; // only show 5 rows 
+
+    offset: rows to skip
+        SELECT column_name 
+        FROM table_name 
+        LIMIT 5 // only show 5 rows 
+        OFFSET 5; // start with row 6 
+fetch: pretty much just like a limit but more efficient for a result set that contains a large number of records/rows 
+    SELECT column_name 
+    FROM table_name 
+    ORDER BY column_name 
+    FETCH FIRST 5 ROW ONLY { FIRST | NEXT } [ row_count ] { ROW } ONLY - if there is no row-count it would be default value which is 1
+
+// UNFINISHED - NOT EXIST AND EXIST - LESSON 1.7 - CONDITIONS 
+and: both condition must be true  
+    SELECT column_name 
+    FROM table_name 
+    WHERE column_name = 1 AND id > 5; 
+or: one of the condition must be true  
+    SELECT column_name 
+    FROM table_name 
+    WHERE column_name = 1 OR id > 5; 
+and & or 
+    SELECT column_name 
+    FROM table_name 
+    WHERE (column_name = 1 OR id > 5) AND (column_name2 > 5); 
+not
+    not in: select rows that are not in the specified values 
+        SELECT column_name 
+        FROM table_name 
+        WHERE column_name NOT IN ("Smith","Brown"); // select rows where the column specified doesn't have smith or brown 
+    not like: select rows that doesn't contain specified characters  
+        SELECT column_name 
+        FROM table_name 
+        WHERE column_name NOT LIKE 'Smi%'; // select rows where the column specified doesn't have the characters Smi
+    not between: select rows that are not in the specified range of values  
+        SELECT column_name 
+        FROM table_name 
+        WHERE column_name NOT BETWEEN 100 AND 300;
+    not null: select rows that are not null, bruh 
+        SELECT column_name 
+        FROM table_name 
+        WHERE column_name NOT NULL;
+    not exists: check whether rows exists  
+        SELECT column_name 
+        FROM table_name 
+        WHERE NOT EXISTS( //  
+            SELECT * 
+            FROM another_table_name 
+            WHERE another_table_name.column_id = table_name.column_id 
+        )
+like: if the column specified contains the character specified 
+    SELECT column_name 
+    FROM table_name 
+    WHERE column_name LIKE "Kat%";
+in: select rows that contains one or more of the specified values 
+    SELECT column_name 
+    FROM table_name 
+    WHERE column_name IN ("value1","value2","value3")
+between: select rows of specified range values 
+    SELECT column_name 
+    FROM table_name 
+    WHERE column_name BETWEEN 100 AND 300;
+exist: 
+
+// UNFINISHED - LAST 2 JOINS - LESSON 1.8 - VIEWS: like a temporary table | result of a query that we can query from  
+create view 
+    CREATE VIEW view_name AS 
+    SELECT column_name 
+    FROM table_name;
+
+    selecting from a view 
+        SELECT * 
+        FROM view_name;
+change view 
+    CREATE OR REPLACE view_name AS 
+    SELECT column_name 
+    FROM table_name;
+alter view 
+    ALTER VIEW view_name 
+    RENAME TO new_view_name;
+drop view 
+    DROP VIEW IF EXISTS view_name;
+// LESSON 1.9 - JOIN 
+inner join: only join data that are present in both tables 
+    SELECT column_name, column_name_from_another_table
+    FROM table_name1 // left 
+    INNER JOIN table_name2 // right 
+    ON table_name1.column_id = table_name2.column_id // foreign key from left = primary key from right
+left outer join: only join data that are present in both tables + left(from) table 
+    SELECT column_name, column_name_from_another_table
+    FROM table_name1 
+    LEFT OUTER JOIN table_name2 
+    ON table_name1.column_id = table_name2.column_id 
+right outer join: only join data that are present in both tables + right(join) table 
+    SELECT column_name, column_name_from_another_table
+    FROM table_name1 
+    RIGHT OUTER JOIN table_name2 
+    ON table_name1.column_id = table_name2.column_id 
+full join: join data present from both left and right tables 
+    SELECT column_name, column_name_from_another_table
+    FROM table_name1 
+    FULL OUTER JOIN table_name2 
+    ON table_name1.column_id = table_name2.column_id 
+cross join: e.g. row 1(left) matches to row1(right),row2(right),row3(right), row2(left) matches to row1(right),row2(right),row3(right)
+    SELECT * 
+    FROM table_name 
+    CROSS JOIN another_table_name;
+self join: not a type of join but rather a strategy for joining 
+ 
+natural join 
+
+// UNFINISHED - LESSON 1.10 - TRIGGER: do something(modify,alter,etc.) once the condition has been met | like a conditional statement in other programming languages 
+create trigger 
+    CREATE TRIGGER trigger_name 
+    // [BEFORE | AFTER ] { EVENT }
+    ON table_name 
+    // [ FOR EACH ROW | FOR EACH COLUMN ]
+    EXECUTE PROCEDURE trigger_function 
+drop trigger 
+alter trigger 
+enable triger: allows a trigger or all triggers related to a table  
+disable trigger: disallow a trigger or all triggers related to a table 
+
+// UNFINISHED - LESSON 1.11 - INDEXES: used to enhance the retrieval of data from the databases | indexes tend to help the database server to identify the defined rows much faster than it could do without indexes 
+index features 
+    - enhance the data output speed with select and where 
+    - slows down data input speed with insert and update 
+    - can create unique index which is similar to the unique constraint 
+cons of index 
+    - should not be used on columns, whcih include a large number of null values 
+    - cannot be used with small tables 
+    - we do not create indexes for tables, with frequent, large batch update or insert operations 
+types of postgresql indexes 
+    hash indexes: can perform a faster lookup than a b-tree index however it is limited to equality operators that will perform matching operations 
+    b-tree indexes: keeps the sorted data and permits the insertions,searches,deletions and sequential access in logarithmic time 
+        - consider using b-tree index when index columns uses one of the below operators list: <, <=, =, >=, BETWEEN, IN, IS NULL, IS NOT NULL, LIKE, ~ 
+    gin indexes: if we have several values stored in a single column such as range type, array, jsonb, and hsttore, then gin indexes are most beneficial
+    gist indexes: most commonly used for indexing in full-text search and geometric data types  
+    sp-gist indexes: enables the devleopment of an extensive range of dissimilar non-balanced data structures
+    brin indexes: used on a column, which contains a linear sort order, such as the generated date column of the sales order  
+create index 
+    CREATE INDEX index_name 
+    ON table_name 
+    USING HASH (indexed_column) // USING [ type_of_index ] (indexed_column)
+drop index 
+list indexes 
+unique index 
+index on expression 
+partial index 
+reindex 
+multi-column indexes 
+
+// LESSON 1.12 - CONSTRAINTS 
+constraints definition 
+    not null: make sure that column cannot have a null value 
+    primary key: define primary key at current table  
+    foreign key: define primary key of another table 
+    unique: make sure that column cannot have repeating values   
+    check: used to control the value of columns being inserted 
+    exclusion: COULDN'T SEE ANY RESOURCES FOR THIS, IDK WHY 
+constraint when creating a table 
+    CREATE TABLE table_name (
+        primary_key INTEGER NOT NULL PRIMARY KEY, // column_name data_type_ constraint 
+        foreign_key INTEGER NOT NULL FOREIGN KEY, 
+        unique_column VARCHAR(50) UNIQUE,
+        date_column DATE CHECK (date_column > "1900-01-01") // with this, date_column can only contain values greater than 1900-01-01
+    );
+adding a constraint 
+    ALTER TABLE table_name 
+    ADD CONSTRAINT uniquectm_const UNIQUE(column_name); // ADD CONSTRAINT constraint_name constraint_definition(column_name)
+dropping a constraint 
+    ALTER TABLE table_name 
+    DROP CONSTRAINT column_name;
+
+// LESSON 1.13 - ADVANCE 
+udf(user-defined-functions): stored procedure is a set of sql and procedural commands such as declarations, assignments, loops, flow-of-control, etc.
+    CREATE FUNCTION function_name (argument) // CREATE [OR REPLACE] FUNCTION function_name (argument)
+    RETURNS INT // RETURNS return_datatype 
+    LANGUAGE plpgsql AS 
+    $function$ // start of function body 
+    DECLARE 
+        sample_variable_count INTEGER // variable declaration
+    BEGIN 
+        SELECT COUNT(column_name)
+        INTO sample_variable_count // place the result in this variable 
+        FROM table_name 
+        WHERE sample_variable_price BETWEEN 100 AND 300;
+        RETURN sample_variable_count;
+    END 
+    $function$ // end of function body 
+alias: alias for column name or/and table name 
+    SELECT column_name column_name_alias 
+    FROM table_name table_name_alias;
+date and time function 
+    age(): subtract arguments 
+    currentdate/time(): select current date or time 
+    date_part(): get subfield (equivalent to extract)
+    extract(): get subfield 
+    isfinite(): test for finite date ,time and interval (not +/-infinity)
+    justify(): adjust interval 
+    age(timestamp,timestamp): when invoked with the timestamp form of the second argument, age() subtract arguments, producing a "symbolic" result that uses years and months and is of type interval
+    age(timestamp): when invoked with only the timestamp as argument, age() subtracts from the current_date (at midnight)
+common psql commands 
+    connecting to database 
+        psql -d database_name -U user -W 
+    switch connection to a new database 
+        \c database_name 
+    list availabe databases 
+        \l 
+    list available tables 
+        \dt 
+    describe a table (grab the columns,datatypes,indexes,nullable,default,etc. of a table)
+        \d table_name 
+    list available functions 
+        \df 
+    list available schema 
+        \dn 
+    list users and their roles 
+        \du 
+    list available view 
+        \dv 
+    perform the previous command 
+        \g 
+    execute psql commands from a file 
+        \i file_name 
+    get help on psql commands 
+        \? -> \h -> \h COMMAND 
+    turn on query execution time 
+        \timing | to turn off -> \timing 
+    edit command in an editor 
+        \e 
+    quit psql 
+        \q
+union: combine the output of various commands into a single output | merge everything 
+    SELECT column_name 
+    FROM table_name 
+    UNION 
+    SELECT another_column_name 
+    FROM another_table_name
+intersect: merge the output of multiple commands | merge intersectedly 
+    SELECT column_name 
+    FROM table_name 
+    INTERSECT  
+    SELECT another_column_name 
+    FROM another_table_name
+except: return all values from the initial dataset and eliminates all values that matches with data from the second dataset 
+    SELECT column_name 
+    FROM table_name 
+    EXCEPT  
+    SELECT another_column_name 
+    FROM another_table_name

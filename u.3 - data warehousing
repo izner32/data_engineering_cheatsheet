@@ -1,0 +1,39 @@
+// LESSON 1.1 - INTRO TO DATA WAREHOUSE 
+data warehousing 
+    - rdbms that is designed for query and analysis rather than for transaction processing 
+    - usually contains historical data derived from transactional data
+operational database vs data warehouse 
+    operational database 
+        - oltp: online transactional processing | handles operational data, these are data contained in the operation of a particular system 
+        - tables and joins are complicated since they are normalized for rdbms. This is done to reduce redundant files and to save storage space. 
+        - optimized mostly for write operations 
+        - datas are used to keep the business running 
+    data warehouse 
+        - olap: online analytical processing | handles historical data to perform analysis on these data 
+        - tables and joins are accessible since they are de-normalized. This is done to minimize the response time for analytical queries.
+        - optimized for read operations 
+        - datas are used for analysis 
+data warehouse architecture 
+    sources -> 
+        etl -> staging area -> 
+            transformation -> data warehouse -> 
+                transformation -> data marts -> 
+                    transformation -> analysis
+
+    sources 
+        - usually operational database, e.g. customer database, sales database, products database 
+    staging area 
+        - temporary location where a record from source systems is copied 
+    data warehouse 
+    data marts 
+        - used to divide multiple groups within the data warehouse, this is a way to organize data warehouse 
+    analysis 
+
+
+// LESSON 1.2 - OLAP TECHNOLOGY 
+
+
+// LESSON 1.3 - DIMENSIONAL MODELING 
+
+
+// LESSON 1.4 - SCHEMAS 
