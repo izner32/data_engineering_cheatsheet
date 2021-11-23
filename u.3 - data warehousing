@@ -13,27 +13,100 @@ operational database vs data warehouse
         - tables and joins are accessible since they are de-normalized. This is done to minimize the response time for analytical queries.
         - optimized for read operations 
         - datas are used for analysis 
-data warehouse architecture 
+data warehouse architecture (using three tier architecture)
     sources -> 
         etl -> staging area -> 
-            transformation -> data warehouse -> 
-                transformation -> data marts -> 
-                    transformation -> analysis
+            etl -> data warehouse -> 
+                etl -> data marts -> 
+                    etl -> analysis
 
     sources 
         - usually operational database, e.g. customer database, sales database, products database 
     staging area 
         - temporary location where a record from source systems is copied 
     data warehouse 
+        - storage for cleaned and transformed data where we could extract data for analysis easily 
     data marts 
-        - used to divide multiple groups within the data warehouse, this is a way to organize data warehouse 
+        - divide multiple groups within the data warehouse, this is a way to organize data warehouse 
+        - they don't need to access all the tables in data warehouse 
     analysis 
+        - data can be accessed efficiently, e.g. olap tools, reporting tools, data mining tools, etc. 
+types of data warehouses 
+    host based data warehouses 
+    lan based work group 
+    single stage data warehouses 
+    multi stage data warehouses 
+    stationary data warehouses 
+    distributed data warehouess 
+    virtual data warehouses 
+data warehouse modeling 
+    - different with operational databases systems data modeling 
+
+    data warehousing modeling workflow 
+        business requirements -> conceptual data modeling -> logical data modeling -> physical data modeling -> fulfilled business requirement for data storage 
+
+    business requirements 
+        - obviously determine business requirements 
+    conceptual data model 
+        - contains entities(tables) and the relationships among them 
+    logical data model 
+        - contains attributes(columns) and constraints(especially primary and foreign keys)
+    physical data model 
+        - describes how the model will be presented in the database 
+data warehouse design 
 
 
-// LESSON 1.2 - OLAP TECHNOLOGY 
+// LESSON 1.2 - INTRO TO OPERATIONAL DATA STORES 
+definition 
+    - is used for operational reporting and as a source of data for the enterprise data warehouse
+operational data stores (ods) architecture 
+    source -> 
+        etl -> ods
+            -> management reports 
+            -> web based applications
+            -> other applications 
+            -> etl -> data warehouse  
+                -> etl -> data marts 
+                -> etl -> olap cubes 
+operational data stores(inmon and imhoff) vs data warehouse(kimball)
+    operational data store 
+        - for operational reporting and supports current or near real time reporting requirements 
+        - consist of only a short window of data 
+        - typically detailed only 
+        - used for detailed decision making and operational reporting 
+        - serves as conduct for data between operational and analytics system 
+
+    data warehouse 
+        - intended for historical and trend analysis, usually reporting on a large volume of data 
+        - includes the entire history of data 
+        - contains summarized and detailed data 
+        - used for long term decision making and management reporting 
+        - serves as a repository for cleansed and consolidated data sets 
+
+// LESSON 1.3 - ETL, ELT AND EL 
+etl 
+elt 
+el 
+
+// LESSON 1.4 - METADATA 
+
+// LESSON 1.5 - DATA MART 
+
+// LESSON 2.1 - OLAP TECHNOLOGY 
+oltp 
+olap 
+    types of olap 
 
 
-// LESSON 1.3 - DIMENSIONAL MODELING 
+// LESSON 3.1 - DIMENSIONAL MODELING 
+dimensional modeling 
+fact table 
+dimensional table 
+
+// LESSON 3.2 - SCHEMAS 
+star schema 
+snowflake schema 
+star vs snowflake schema 
+fact constellation 
 
 
-// LESSON 1.4 - SCHEMAS 
