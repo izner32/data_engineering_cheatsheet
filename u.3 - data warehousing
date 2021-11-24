@@ -15,7 +15,7 @@ operational database vs data warehouse
         - datas are used for analysis 
 data warehouse architecture (using three tier architecture)
     sources -> 
-        etl -> staging area -> 
+        etl with staging area(dataframe/rdd/dataset) -> 
             etl -> data warehouse -> 
                 etl -> data marts -> 
                     etl -> analysis
@@ -53,8 +53,18 @@ data warehouse modeling
         - contains attributes(columns) and constraints(especially primary and foreign keys)
     physical data model 
         - describes how the model will be presented in the database 
-data warehouse design 
+data warehouse design: single data repository where a record from multiple data sources is integrated for olap | like in database design values for the data are already here, you're just going to avoid some anomalies in here 
+    top down approach 
+        - data at the lowest level of detail are stored in the data warehouse 
+        - dimensional data marts containing data needed for specific business processes or specific departments are created from the data warehouse 
 
+        top down architecture 
+            - sources(usually oltp) -> etl -> staging area -> etl -> data warehouse -> etl -> data mart  
+    bottom up approach: 
+        - data marts are first create to provide reporting and analytical capabilities for specific business processes
+        - these data marts can then be integrated to create a comprehensive data warehouse 
+
+        UNFINISHED - bottom up architecture 
 
 // LESSON 1.2 - INTRO TO OPERATIONAL DATA STORES 
 definition 
@@ -84,29 +94,93 @@ operational data stores(inmon and imhoff) vs data warehouse(kimball)
         - serves as a repository for cleansed and consolidated data sets 
 
 // LESSON 1.3 - ETL, ELT AND EL 
-etl 
-elt 
-el 
+etl: extract, transform, load 
+    - recurring method (daily,weekly,monthly) of a data warehouse system and needs to be agile, automated, and well documented
 
-// LESSON 1.4 - METADATA 
+    etl workflow 
+        extraction(source) -> data cleansing(staging database) -> data transformation(staging database) -> loading(target database) 
+elt: extract, load, transform 
+
+    elt workflow 
+        extraction(source) -> load(target database) -> data cleansing(target database) -> data transformation(target database)
+
+el: extract, load 
+    - when you just want to move data but there is no transformation to be done 
+
+etl vs elt 
+    etl 
+        - transformation are performed in etl server 
+        - typically used for small amount of data 
+        - used in source to target transfer 
+        - compute intensive transformations 
+    elt 
+        - transformation are performed in the target database 
+        - typically used for big amount of data 
+
+// LESSON 1.4 - METADATA: data about data 
+- roadmap to a data warehouse 
+- metadata in a data warehouse defines the warehouse objects 
 
 // LESSON 1.5 - DATA MART 
+- data marts are derived from subsets of data in a data warehouse, though in the bottom-up data warehouse design methodology, the data warehouse is created from the union of organizational data marts
+- fundamental use of a data mart is Business Intelligence (BI) applications
+- holds only one subject area 
 
 // LESSON 2.1 - OLAP TECHNOLOGY 
-oltp 
-olap 
-    types of olap 
-
+oltp: featured by a large number of short on-line transactions (INSERT,UPDATE,DELETE)
+    - main priority is very rapid query processing, maintaing record integrity in multi-access environments and effectiveness consistent by the number of transactions per second 
+olap: database in which business users get their data from   
+    UNFINISHED - types of olap 
+        rolap 
+        molap
+        holap 
+        others 
+            wolap
+            dolap   
+            molap
+            solap
 
 // LESSON 3.1 - DIMENSIONAL MODELING 
-dimensional modeling 
-fact table 
-dimensional table 
+dimensional modeling: produce database architecture that is easy for end-clietns to understand and write queries 
+elements of dimensional modeling 
+    fact table: event that is counted or measured 
+        - numerical value 
+        - e.g. a sale transaction can be converted into facts such as the number of products ordered and the price paid for the products 
+    dimensional table: reference information that gives context to the facts or that describe the facts 
+        - includes descriptive data about the numerical values in the fact table
+        - e.g. order data, user name, product number, order ship-to, bill-to locations, etc. 
+    measure: numeric attribute(column) of a fact table, representing the performance or behavior of the business relative to the dimensions  
+        additive: summarize across all dimensions 
+        semi-additive: summarize across some of dimensions 
+        non-additive: not summarize across all dimension 
+basic models used in dimensional modeling 
+    - star model: one central fact table and a set of smaller tables (dimensions)
+    - snowflake model: conclusion of decomposing one or more of the dimensions (after performing normalization at star model - not sure)
+multidimensional data modeling: represents data in the form of cube 
+    - represents data in a data cube where you could see the three dimensional tables in one model 
+    - this is less computationally intensive to create (i think? idk)
+    - UNFINISHED 
 
 // LESSON 3.2 - SCHEMAS 
-star schema 
-snowflake schema 
+star schema: one central fact table and a set of smaller dimensioanl tables  
+    - very simple schema 
+
+    fact: only one fact table can contain in star schema 
+    dimensional: doesn't contain another dimensional table under them unlike in snowflake 
+snowflake schema: still only contains one fact table and dimensional tables that contains another sub-dimensional tables under them 
+    - when dimensional tables are all normalized in star schema it becomes a snowflake schema 
 star vs snowflake schema 
-fact constellation 
+    star schema 
+        - fact table will be at the center and is connected to the dimension tables 
+        - tables are completely in a denormalized structure 
+        - sql queries performance is good as there is less number of joins involved 
+        - data redundancy is high and occupies more disk space 
+    snowflake schema 
+        - snowflake schema is an extension of star schema where the dimension tables are connected to one or more dimensions 
+        - dimensional tables are normalized 
+        - performacne of sql queries is a bit less when compared to star schema as more number of joins are involved 
+        - data redundancy is low and occupies less disk space when compared to star schema 
+fact constellation: also called as galaxy schema 
+    - when two or more fact tables sharing one or more dimensional table/s
 
 

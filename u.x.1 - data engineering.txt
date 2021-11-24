@@ -2,23 +2,25 @@
 
 
 // LESSON 1.1 - DATA ENGINEERING FLOW (HIGH LEVEL)
-operational database (oltp) data modeling: database to keep the business running | technically not a part of data engineering but this is good to know 
+operational database (oltp) data modeling + database design: database to keep the business running | technically not a part of data engineering but this is good to know 
     - understanding business
     - entity relationship data model(conceptual | contains tables and relationships among them) 
     - relational data model(describing constraints and datatypes of column) 
     - insert values 
     - relational database design(remove anomalies by performing normalization) 
-data warehouse modeling 
+data warehouse modeling/dimensional modeling  
     - business requirements 
     - conceptual data model 
     - logical data model 
     - physical data model 
-data warehousing(olap): database for analytical queries | this uses three tier architecture
+data warehouse design 
+    - choose whether top down approach or bottom up approach for data marts 
+data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
     - sources(usually oltp)
-    - etl -> staging area 
+    - etl with staging area (dataframe/rdd/dataset)
     - etl -> data warehouse 
-    - etl -> data marts
-    - etl -> analysis
+    - etl -> data mart 
+
 
 // LESSON 1.2 - DATA ENGINEERING FLOW (LOW LEVEL)
 
