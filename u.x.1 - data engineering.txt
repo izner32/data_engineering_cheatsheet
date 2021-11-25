@@ -17,7 +17,7 @@ data warehouse design
     - choose whether top down approach or bottom up approach for data marts 
 data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
     - sources(usually oltp)
-    - etl with staging area (dataframe/rdd/dataset)
+    - el(extract,load) -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again 
     - etl -> data warehouse 
     - etl -> data mart 
 

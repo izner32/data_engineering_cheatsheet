@@ -15,7 +15,7 @@ operational database vs data warehouse
         - datas are used for analysis 
 data warehouse architecture (using three tier architecture)
     sources -> 
-        etl with staging area(dataframe/rdd/dataset) -> 
+        etl with staging area(s3) -> 
             etl -> data warehouse -> 
                 etl -> data marts -> 
                     etl -> analysis
