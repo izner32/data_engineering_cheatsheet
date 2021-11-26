@@ -1,0 +1,147 @@
+// LESSON 1.1 - INTRO TO CASSANDRA 
+what is cassandra 
+    - highly scalable, high performacne, distributed nosql database
+    - designed to handle huge amount of data across many commodity servers, providing hgih availability without a single point of failure
+    - column oriented nosql database 
+    - fault tolerant meaning suppose there are 4 nodes in a cluster, here each node has a copy of same data, if one node is no longer serving then other three nodes can served as per request  
+    - supports acid property (atomicity, consistency, isolation and durability)
+cassandra architecture: cassandra was designed to handle big data workload across multiple nodes without a single point of failure 
+    - in Cassandra, each node is independent and at the same time interconnected to other nodes. All the nodes in a cluster play the same role
+    - every node in a cluster can accept, read, and write requests, regardless of where the data is actually located in the cluster 
+    - in the case of failure of one node, read/write requests can be served from other nodes in the network 
+components of cassandra 
+    node: place where data is stored  
+    data center: collection of related nodes  
+    cluster: component which contains one or more data centers 
+    commit log: crash-recovery mechanism, every write operation is written to the comit log  
+    mem-table: memory resident data structure. after commit log, the data will be written to the mem-table. Sometimes, for a single-column fmaily there wil be multiple mem-tables 
+    sstable: disk file to which the data is flushed from the mem-table when its contents reach a threshold value 
+    bloom filter: quick, nondeterministic, algorithms for testing whether an element is a member of a set. special kind of cache. bloom filters are accessed after every query 
+cql (cassandra query language)
+    - used to access cassandra through its nodes 
+    - client can approach any of the nodes for their read-write operations, that node (coordinator) plays a proxy between the client and the nodes holding the data 
+
+    write operations 
+        write data -> commit log(inside memory disk) -> memtable(outside memory disk) -> flush to sstable(inside memory disk)
+    read operations 
+        - cassandra gets values from the mem-table and checks the bloom filter to find the appropriate sstable which contains the required data 
+unfinished - data model 
+
+// LESSON 1.2 - CASSANDRA KEYSPACE: equivalent to database in rdbms  
+create keyspace 
+    CREATE KEYSPACE keyspace_name 
+    WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3}; // WITH replicaton={'class':strategy name,'replication_factor': no_of_replications_on_different_nodes}
+    [AND DURABLE_WRITES = false;] // default is set to true, just don't touch this at all
+    strategies 
+        SimpleStrategy: used in the case of one data center  
+        NetworkTopologyStrategy: used in the case of more than one data centers 
+    replication factor: number of replicas of data places on different nodes 
+alter keyspace 
+    ALTER KEYSPACE keyspace_name 
+    WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 3}; // WITH replicaton={'class':strategy name,'replication_factor': no_of_replications_on_different_nodes}
+    [WITH DURABLE_WRITES = false;] 
+drop keyspace 
+    DROP KEYSPACE keyspace_name 
+
+// UNFINISHED - INDEX - LESSON 1.3 - CASSANDRA TABLE INDEX 
+create table 
+    CREATE TABLE tablename(  
+        column1_name uuid PRIMARYKEY,  // column_name datatype constraint
+        column2_name double,  // column_name datatype
+        column3_name float 
+    )  
+alter table 
+    adding new column 
+        ALTER TABLE table_name  
+        ADD new_column_name text; // ADD new_column_name datatype; 
+drop table: remove the table as a whole 
+    DROP TABLE table_name 
+truncate table: all the rows of the table are all deleted permanently 
+    TRUNCATE table_name 
+create index 
+    
+drop index 
+
+cassandra batch: used to execute multiple modification statements (insert, update, delete) 
+    BEGIN BATCH 
+        // enter multiple statements here 
+        INSERT INTO table_name(column_name1, column_name2) VALUES (1,2)
+        UPDATE table_name SET column_name = 1 WHERE column_id = 1;
+    APPLY BATCH 
+    
+// LESSON 1.4 - CASSANDRA QUERY (CQL)
+create data 
+    INSERT INTO table_name 
+    (column_name1, column_name2) 
+    VALUES (value_1, value_2); 
+read data 
+    SELECT column_name FROM table_name;
+update data 
+    UPDATE keyspace_name.table_name 
+    SET column_name1 = value1,
+        column_name2 = value2
+    WHERE column_id = 1;
+delete data 
+    DELETE FROM table_name 
+    WHERE column_name = value; // WHERE [condition]  
+
+// UNFINISHED - EXPLAIN EACH DATATYPE - LESSON 1.5 - CASSANDRA CQL TYPES 
+data types 
+    ascii 
+    bigint 
+    blob 
+    boolean 
+    counter 
+    double 
+    float 
+    frozen 
+    inet 
+    int 
+    list 
+    map 
+    set text 
+    timestamp 
+    timeuuid 
+    tuple 
+    uuid 
+    varchar 
+    varint 
+
+// LESSON X.1 - RELATIONAL DB VS NOSQL DB 
+quick definition to know 
+    vertical scaling: keep existing infrastructure but add more computing power 
+    horizontal scaling: add more insfrastructure 
+main advantage of nosql 
+    - simplicity of design 
+    - horizontal scaling 
+    - faster because it uses different data structure compared to relational databases 
+nosql vs rdbms 
+    nosql 
+        - supports a very simple query langauge 
+        - has no fixed schema (although you could add one)
+        - only eventually consistent 
+        - don't support transactions (support only simple transactions)
+        - used to handle data coming in high speed 
+        - can manage structured, unstructured and semi structured data (IMPORTANT)
+        - can handle big data (IMPORTANT)
+        - gives both read and write scalability 
+    rdbms 
+        - supports a powerful query language that can perform even more complex query 
+        - has a fixed schema (you need to define format for how the table should look like)
+        - follows acid properties (atomicity, consistency, isolation, and durability)
+        - supports transactions (also complex transactions with joins)
+        - used to handle data coming in low speed 
+        - manages only structured data (IMPORTANT) 
+        - used to handle moderate volume of data (IMPORTANT)
+        - gives read scalibility only 
+conclusion: right time to use sql vs nosql 
+    sql 
+        - data is very structured 
+        - acid compliance is a must 
+        - used to handline moderate to small data 
+        - vertically scalable (small and medium data)
+    nosql 
+        - semi structured or unstructured 
+        - used to handling big data 
+        - horizontally scalable (big data)
+

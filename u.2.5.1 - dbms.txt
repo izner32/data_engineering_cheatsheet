@@ -123,7 +123,7 @@ hashing: is an effective technique to calculate the direct location of a data re
     - its main purpose is to use math problem to organize data into easily searchable buckets
 
 // LESSON 1.7 - TRANSACTION AND CONCURRENCY 
-transaction: group of task, a single task is the minimum processing unit which cannot be divided further | you could think of task as a query which access data using read and write operations 
+transaction: group of task, a single task is the minimum processing unit which cannot be divided further | you could think of task as a query which uses instruction like select, update, delete, etc. 
     transaction must maintain acid 
         atomicity: transaction must be treated as an atomic unit, that is , either all of tis operations are executed or none. 
         consistency: database must remain in a consistent state after any transaction. 

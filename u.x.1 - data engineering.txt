@@ -1,7 +1,9 @@
 // LESSON 1.0 - INTRO TO DATA ENGINEERING 
 
+// LESSON 1.1 - STORAGE,RAM,DISK, EVERYTHING YOU NEED TO KNOW TO UNDERSTAND SAVING MEMORY AND WHY IS IT IMPORTANT IN DATA ENGINEERING 
 
-// LESSON 1.1 - DATA ENGINEERING FLOW (HIGH LEVEL)
+
+// LESSON 1.1 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data warehouse 
 operational database (oltp) data modeling + database design: database to keep the business running | technically not a part of data engineering but this is good to know 
     - understanding business
     - entity relationship data model(conceptual | contains tables and relationships among them) 
@@ -10,17 +12,20 @@ operational database (oltp) data modeling + database design: database to keep th
     - relational database design(remove anomalies by performing normalization) 
 data warehouse modeling/dimensional modeling  
     - business requirements 
-    - conceptual data model 
+    - conceptual data model: determine schema, is it star,or snowflake,or others?
     - logical data model 
     - physical data model 
 data warehouse design 
     - choose whether top down approach or bottom up approach for data marts 
-data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
-    - sources(usually oltp)
-    - el(extract,load) -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again 
-    - etl -> data warehouse 
-    - etl -> data mart 
+    data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
+        - sources(usually oltp)
+        - el(extract,load) -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again 
+        - etl -> data warehouse 
+        - etl -> data mart 
+    data warehousing(olap) | bottom up approach: database for analytical queries | this uses three tier architecture
+        - 
 
+// LESSON 1.2 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data lake 
 
 // LESSON 1.2 - DATA ENGINEERING FLOW (LOW LEVEL)
 
