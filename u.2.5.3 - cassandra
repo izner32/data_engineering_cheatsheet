@@ -107,41 +107,5 @@ data types
     varchar 
     varint 
 
-// LESSON X.1 - RELATIONAL DB VS NOSQL DB 
-quick definition to know 
-    vertical scaling: keep existing infrastructure but add more computing power 
-    horizontal scaling: add more insfrastructure 
-main advantage of nosql 
-    - simplicity of design 
-    - horizontal scaling 
-    - faster because it uses different data structure compared to relational databases 
-nosql vs rdbms 
-    nosql 
-        - supports a very simple query langauge 
-        - has no fixed schema (although you could add one)
-        - only eventually consistent 
-        - don't support transactions (support only simple transactions)
-        - used to handle data coming in high speed 
-        - can manage structured, unstructured and semi structured data (IMPORTANT)
-        - can handle big data (IMPORTANT)
-        - gives both read and write scalability 
-    rdbms 
-        - supports a powerful query language that can perform even more complex query 
-        - has a fixed schema (you need to define format for how the table should look like)
-        - follows acid properties (atomicity, consistency, isolation, and durability)
-        - supports transactions (also complex transactions with joins)
-        - used to handle data coming in low speed 
-        - manages only structured data (IMPORTANT) 
-        - used to handle moderate volume of data (IMPORTANT)
-        - gives read scalibility only 
-conclusion: right time to use sql vs nosql 
-    sql 
-        - data is very structured 
-        - acid compliance is a must 
-        - used to handline moderate to small data 
-        - vertically scalable (small and medium data)
-    nosql 
-        - semi structured or unstructured 
-        - used to handling big data 
-        - horizontally scalable (big data)
+
 

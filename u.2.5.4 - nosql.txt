@@ -1,0 +1,91 @@
+// LESOSN 1.0 - INTRO TO NOSQL 
+definition 
+    - does not use a relational data modeling technique 
+    - better at scaling out than rdbms because of its horizontal scalability 
+    
+// LESSON 1.1 - FOUR TYPES OF NOSQL DATABASES 
+key-value store 
+    definition 
+        - data are stored in key value pairs, somehow like json 
+    sample data
+        row | key | value 
+         1    id1    {"name":"Renz","age":20}
+         2    id2    {"name":"Rene","age":21}
+document-based store 
+    definition 
+        - datas are stored in a document like json, xml, etc. 
+            - you could think of json as python's dictionary or javascript's object 
+    sample data: json  
+        "json":{
+            "name":"Renz",
+            "age":20
+            "items":{
+                "obj1": 1,
+                "obj2": 2,
+            }
+        }
+column-based store 
+    definition 
+        - pretty much like rdbms except much preferred for semi-structured/unstructured and big data 
+        - stores information in columns, rather than in rows which is more usual with sql 
+        - data is stored in columns, which are grouped into families, and these families are further grouped into more columns 
+    sample data: column oriented 
+          column 1                  column 2                column 3 
+        name | id    |           grade | id       |       gpa | id 
+        john   001   |           Senior  001      |       4.00  001 
+        karen  002   |           Junior  002      |       3.67  002
+graph-based store 
+    definition 
+    sample data 
+
+// LESSON 1.2 - HOW IS DATA STORED IN NOSQL 
+
+// LESSON 1.3 - SCHEMA DESIGN FOR NOSQL 
+
+// LESSON 2.1 - NOSQL DATA MODELING TECHNIQUES 
+conceptual techniques 
+general modeling techniques 
+hierarchy modelign techniques 
+
+
+// LESSON X.1 - RELATIONAL DB VS NOSQL DB - for oltp
+quick definition to know 
+    vertical scaling: keep existing infrastructure but add more computing power 
+    horizontal scaling: add more insfrastructure 
+    structured data 
+    semi-structured data 
+    unstructured data 
+main advantage of nosql 
+    - simplicity of design 
+    - horizontal scaling 
+    - faster because it uses different data structure compared to relational databases 
+nosql vs rdbms 
+    nosql 
+        - supports a very simple query langauge 
+        - has no fixed schema (although you could add one)
+        - only eventually consistent 
+        - don't support transactions (support only simple transactions)
+        - used to handle data coming in high speed 
+        - can manage structured, unstructured and semi structured data (IMPORTANT)
+        - can handle big data (IMPORTANT)
+        - gives both read and write scalability 
+    rdbms 
+        - supports a powerful query language that can perform even more complex query 
+        - has a fixed schema (you need to define format for how the table should look like)
+        - follows acid properties (atomicity, consistency, isolation, and durability)
+        - supports transactions (also complex transactions with joins)
+        - used to handle data coming in low speed 
+        - manages only structured data (IMPORTANT) 
+        - used to handle moderate volume of data (IMPORTANT)
+        - gives read scalibility only 
+conclusion: right time to use sql vs nosql | how to decide which database to use 
+    sql 
+        - data is very structured and acid compliance is a must 
+        - vertically scalable (small and medium data) only: must increase the power of your single computer 
+    nosql 
+        - semi structured or unstructured | although you could store structured data in here, its main advantage focus on semi structured and unstructured 
+            - sql requires structured data meaning attributes, datatypes of column shall be defined explicitly, this isn't possible to some of the datas (those are unstructured data) thus we use nosql 
+        - horizontally scalable (big data): could split data into multiple servers 
+            - if the data is big and but is a structure data, it's still better to use nosql since nosql could scale much better 
+
+// LESSON X.2 - WHEN TO USE A CERTAIN TYPE OF NOSQL 

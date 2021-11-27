@@ -2,39 +2,61 @@
 
 // LESSON 1.1 - STORAGE,RAM,DISK, EVERYTHING YOU NEED TO KNOW TO UNDERSTAND SAVING MEMORY AND WHY IS IT IMPORTANT IN DATA ENGINEERING 
 
+// LESSON 1.2 - DATA ENGINEERING FLOW (SUPER HIGH LEVEL) - with data warehouse 
+- determine type of operational database: sql or nosql  
+    - determine type of database for data warehousing: sql or nosql or cloud  
+        - data warehouse design: bottom up or top down 
 
-// LESSON 1.1 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data warehouse 
-operational database (oltp) data modeling + database design: database to keep the business running | technically not a part of data engineering but this is good to know 
-    - understanding business
-    - entity relationship data model(conceptual | contains tables and relationships among them) 
-    - relational data model(describing constraints and datatypes of column) 
-    - insert values 
-    - relational database design(remove anomalies by performing normalization) 
-data warehouse modeling/dimensional modeling  
-    - business requirements 
-    - conceptual data model: determine schema, is it star,or snowflake,or others?
-    - logical data model 
-    - physical data model 
-data warehouse design 
-    - choose whether top down approach or bottom up approach for data marts 
-    data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
-        - sources(usually oltp)
-        - el(extract,load) -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again 
-        - etl -> data warehouse 
-        - etl -> data mart 
-    data warehousing(olap) | bottom up approach: database for analytical queries | this uses three tier architecture
-        - 
+// LESSON 1.2.5 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data warehouse 
+determing type of database
+    sql/rdbms (PREFERRED for small to med data + structured + must be acid compliant)
+        operational database (oltp) data modeling + database design: database to keep the business running | technically not a part of data engineering but this is good to know 
+            - understanding business
+            - entity relationship data model(conceptual | contains tables and relationships among them) 
+            - relational data model(describing constraints and datatypes of column) 
+            - insert values 
+            - relational database design(remove anomalies by performing normalization) 
+    nosql (PREFERRED for big data + unstructured/semi structured data)
 
-// LESSON 1.2 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data lake 
+    determine type of database for data warehousing 
+        cloud/not cloud: if cloud sql - aws redshift, if cloud nosql - 
+            sql/rdbms (99% of data warehouses uses sql)
+                - the only concept data warehousing and nosql shares is that they are both used for big data 
 
-// LESSON 1.2 - DATA ENGINEERING FLOW (LOW LEVEL)
+                data warehouse modeling/dimensional modeling  
+                    - business requirements 
+                    - conceptual data model: determine schema, is it star,or snowflake,or others?
+                    - logical data model 
+                    - physical data model 
+            nosql 
+
+        data warehouse design: choose whether top down approach or bottom up approach for data marts 
+            data warehousing(olap) | top down approach: database for analytical queries | this uses three tier architecture
+                - sources(usually oltp)
+                - el(extract,load) 
+                    -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again) 
+                        or 
+                    -> data lake: read this https://qmetrix.com.au/data-lake-vs-staging-layer-difference/
+                - etl -> data warehouse 
+                - etl -> data mart 
+            data warehousing(olap) | bottom up approach: database for analytical queries | this uses three tier architecture
+                - 
+         
+
+
+// LESSON 1.3 - DATA ENGINEERING FLOW (HIGH LEVEL) - with data lake 
+
+// LESSON 1.4 - DATA ENGINEERING FLOW (LOW LEVEL)
 
 // LESSON 1.3 - CONCEPTS 
 - testing in python 
-- data warehousing 
-- data lakes 
-- database design 
+- database 
+    - database design 
     - data modeling 
+- data warehousing 
+    - data warehouse design 
+    - data warehouse modeling 
+- data lakes 
 - exploratory data analysis 
 - dbms
     - normalization 
