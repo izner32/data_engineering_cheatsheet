@@ -36,19 +36,35 @@ column-based store
         karen  002   |           Junior  002      |       3.67  002
 graph-based store 
     definition 
+        - treat the relationship between any two pieces of information as being just as important as the information itself 
+        - this type of data model is really made for any information that you'd usually represent on a graph 
+        - it uses relationships and nodes, with the data being the information itself, and the relationship is formed between nodes 
     sample data 
 
-// LESSON 1.2 - HOW IS DATA STORED IN NOSQL 
+// LESSON 1.2 - SCHEMA DESIGN FOR NOSQL 
+- nosql doesn't really require designation of schema or how the data should look like (e.g. no need to define constraints and datatype unlike in rdbms)
 
-// LESSON 1.3 - SCHEMA DESIGN FOR NOSQL 
-
-// LESSON 2.1 - NOSQL DATA MODELING TECHNIQUES 
+// UNFINISHED - nosql's really just important for oltp and we won't need that in de so i might not finish this - LESSON 2.1 - NOSQL DATA MODELING TECHNIQUES 
 conceptual techniques 
+    denormalization 
+    aggregates 
+    application side joins 
 general modeling techniques 
+    enumerable keys 
+    dimensionality reduction 
+    index table 
+    composite key index 
+    inverted search
 hierarchy modelign techniques 
+    tree aggregation 
+    adjacency lists 
+    materialized paths 
+    nested sets 
+    nested documents flattening: numbered field names 
+    nested documents flattening: proximity queries 
+    batch graph processing 
 
-
-// LESSON X.1 - RELATIONAL DB VS NOSQL DB - for oltp
+// LESSON X.1 - RELATIONAL DB VS NOSQL DB 
 quick definition to know 
     vertical scaling: keep existing infrastructure but add more computing power 
     horizontal scaling: add more insfrastructure 
@@ -80,7 +96,7 @@ nosql vs rdbms
         - gives read scalibility only 
 conclusion: right time to use sql vs nosql | how to decide which database to use 
     sql 
-        - data is very structured and acid compliance is a must 
+        - data is very structured and acid compliance(all sql are acid compliant, in nosql only some database are acid compliant) is a must 
         - vertically scalable (small and medium data) only: must increase the power of your single computer 
     nosql 
         - semi structured or unstructured | although you could store structured data in here, its main advantage focus on semi structured and unstructured 
@@ -88,4 +104,3 @@ conclusion: right time to use sql vs nosql | how to decide which database to use
         - horizontally scalable (big data): could split data into multiple servers 
             - if the data is big and but is a structure data, it's still better to use nosql since nosql could scale much better 
 
-// LESSON X.2 - WHEN TO USE A CERTAIN TYPE OF NOSQL 
