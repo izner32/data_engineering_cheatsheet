@@ -1,0 +1,127 @@
+// LESSON 1.1 - MESSAGE QUEUES 
+communication between services 
+    sender 
+    receiver 
+publish subscribe with message queues 
+    sender 1, sender 2, sender 3 -> sends message thru message queue -> gets send to multiple receiver 
+    https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.baeldung.com%2Fpub-sub-vs-message-queues&psig=AOvVaw3u5gStC6zOGBUEfLrsiuwb&ust=1637234211783000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCKj1ivqin_QCFQAAAAAdAAAAABAD
+
+// LESSON 1.2 - WHAT IS KAFKA 
+apache kafka 
+    - events/messages streaming platform 
+    - critical piece of the big data puzzle 
+    - most popular mesaging platform in the world 
+    - producers(publishers)push messages to kafka 
+    - consumers(subscriber) listen and receive messages 
+
+data workflow with kafka 
+    producer 
+        -> kafka instance 
+            topics -> partitions -> messages 
+                -> consumers
+
+kafka definitions 
+    producer: receives data 
+    topics: contains partitions which contains messages 
+    partitions: contains message/s 
+    messages: data 
+    consumers: read data 
+
+kafka data function 
+- collection
+- storage 
+- transport 
+- distribution 
+- NOT PROCESSING, spark does the processing not kafka 
+
+// LESSON 1.3 - BENEFITS OF KAFKA 
+- high throughput 
+- low latency 
+- fault tolerance agains failures 
+- decouples(separate) producers and consumers 
+- provides horizontal scalability 
+- batch and real time streaming 
+- back pressure handling 
+    - Kafka can cache data until the consumer is ready to receive & process it.
+
+// LESSON 1.4 - KAFKA USE CASES 
+- asynchronous messaging 
+- enables realtime stream processing 
+- log messages and alert 
+- realtime analytics 
+
+// LESSON 2.1 - MESSAGES
+kafka messages  
+    - event 
+    - unit of data 
+        - row,record,map,blob 
+    - byte array 
+    - size limits exists in kafka 
+    - can be batched for efficiency 
+messages content 
+    - key 
+        - need not be unique 
+        - used for patitioning 
+    - value 
+        - content of the message 
+        - user defined 
+    - timestamp 
+        - every message is automatically timestamped 
+        - event time 
+            - message producer creates a timestamp 
+        - ingestion time 
+            - where the kafka broker timestamps it when it stores a record 
+message examples
+    message 1: json 
+        Key=1001
+        Value={
+            "id":1001,
+            "name":"Bob"
+        }
+    message 2: web server log stored in csv format, has no explicit key, kafka automatically assigns a key when no key is assigned 
+        Value="2021-01-01","182.188.192.1","200 OK"
+    message 3: contents are raw byte 
+        Key="Customer101"
+        Value=10010101010100100011110101010
+
+// LESSON 2.2 - TOPICS 
+- an entity that holds and manage messages 
+- examples of topics 
+    - sales transactions, audit logs, video files 
+- support multiple producers and consumers 
+- multiple partitionts per topic 
+
+kafka topics architecture 
+    kafka instance 
+        topic 1(contains partitions that contains messages): orders 
+            p1(partition 1)
+                m1(message 1), m3(message 3) ,m7 
+            p2(partition 2)
+                m2, m6 
+            p3 
+                m4, m5, m8
+        topic 2: logs 
+            p1 
+                m1, m3, m4 
+            p2 
+                m2, m5, m6 
+
+// LESSON 2.3 - BROKERS 
+- nothing but a running kafka instance 
+- receives messages and stores 
+
+// LESSON 2.4 - LOGS 
+- physical files for storing data 
+- managed by kafka brokers 
+- multiple files (by broker/topic/partition)
+
+// LESSON 2.5 - PRODUCERS AND CONSUMERS 
+producers: produces data to kafka(data source)
+consumers: uses data 
+
+// LESSON 2.6 - ROLE OF ZOOKEEPER 
+zookeeper 
+    - used for managing the cluster
+    - every kafka instance/cluster needs zookeeper 
+    - central, realtime information store for kafka 
+

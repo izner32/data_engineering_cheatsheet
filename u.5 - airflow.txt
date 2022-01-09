@@ -1,6 +1,12 @@
 // LESSON 1.1 - DAGS: collection of all the tasks you want to run 
+definition
+    - consist of vertices, or nodes, & directed edges that connect those nodes 
+    - have a direction (->) and do not contain cycles 
 scope: airflow will load any dag object it can import from a dagfile  
 context managers: dags can be used as context managers to automatically assign new operators to that dag 
+part of dags 
+    nodes: step in the data pipeline process 
+    edge: dependencies or relationship other between nodes 
 
 // LESSON 1.2 - OPERATORS: describes a single task in your data pipeline  
 bitshift composition: determine which task would be the first one from the order  
@@ -83,7 +89,9 @@ example of pool
         priority_weight=2
     )
 
-// UNFINISHED- LESSON 2.3 - CONNECTIONS: purpose of connection is for airflow to know how to connect to your environment 
+// LESSON 2.3 - CONNECTIONS: purpose of connection is for airflow to know how to connect to your environment 
+definition 
+    - to create a connection to let's say postgres, you need to use hooks  
 access connections 
     airflow ui -> menu -> admin -> connections 
 
@@ -272,10 +280,28 @@ example code
             task.queue = "sensor_queue"
         if task.timeout > timedelta(hours=48):
             task.timeout = timedelta(hours=48)
-// UNFINISHED - LESSON 3.8 - JINJA TEMPLATING 
-variables 
-mactors 
+
+// UNFINISHED - LESSON 3.8 - JINJA TEMPLATING: templating allow users to "fill in the blank" with important runtime variables for tasks 
+variables: airflow has default variables you could pass in as a python's argument by using provide_context = True 
+macros 
 templating 
+
+example templating(using default airflow variable)
+    def log_details (*args, **kwargs): # you pass argument thru provide_context, args for the varaible you set in airflow, kwargs is for default variables for airflow 
+
+    dag = DAG(
+        "lezgo.demo",
+        schedule_interval="@daily",
+        start_date=datetime.datetime.now()
+    )
+
+    list_task = PythonOperator(
+        task_id="task1",
+        python_callable=log_details # python script we're calling, notice we don't pass an argument but in the implementation of the function it has parameters 
+        dag= dag 
+        provide_context=True # this is way of passing default airflow variables to the python function we assigned at python callable 
+    )
+
 
 // UNFINISHED - LESSON 3.9 - PACKAGED DAGS 
 
@@ -471,7 +497,25 @@ other sensors
     SqlSensor: runs a sql query to check for content  
     and many other in airflow.sensors and airflow.contrib.sensors 
 
-
+// LESSON X.4 - SUMMARY OF EVERYTHING YOU NEED TO KNOW 
+dags: flow. it consists of nodes(task) and line(relationship - connects tasks to create a flow)
+operators,tasks, and downstream/upstream
+    operators: used to create a flow | you could create customized operator too 
+    tasks: each operator is a task 
+    upstream/downstream: a >> b is downstream meaning b must execute after a, vice versa for upstream
+hooks and connections 
+    hooks: like an operator but is used to create a connection to lets say postgres or s3 
+    connections: connection to other things outside airflow e.g. postgres 
+templating and default variables 
+    templating: when you use variables or default variables of airflow 
+    default variables: specify provide_context = True to be able to use default varaibles from airflow 
+scheduling: setting a time on what time should a dag start and end executing  
+sla: send an email when the task exceeded the expected time of execution 
+executor 
+important concepts 
+    backfill 
+    data partitioning: separating flows within a dag, in this way we could achieve parallelism | you could separate data based on time, concept, or data size  
+    data quality: adding a task that checks whether our data is good or not 
 
 // LESSON X.X - CORE IDEAS IN AIRFLOW 
 dags 

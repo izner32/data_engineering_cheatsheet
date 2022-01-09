@@ -1,0 +1,46 @@
+// LESSON 1 - IAM: for user management and giving access 
+features
+    - you can grant other people permission to administer and use resources in your aws account without having to share your password or access key 
+    - you can grant different permissions to different people for different resources 
+infrastructure elements 
+    principal: entity that can make a request for an action or operation on an aws resource | your aws account root user is your first principal 
+    request: when a principal tries to use aws resources/services, that principal sends a request to aws 
+    authentication
+    authorization 
+    actions or operations 
+    resource 
+users 
+    iam users: entity that represents a person or application that interacts with aws 
+    federated users: users you manage outside of aws in your corporate directory, but to whom you grant access to your aws account using temporary security credentials 
+    iam groups: collection of users 
+    iam role: collection of policies (e.g. dynamo readwrite) 
+    policies: low level permission of what you can do with aws service (e.g. dynamo read, dynamo write)
+aws security token service (sts)
+    - create and provide trusted users wiht temporary security credentials that can control access to your aws resources 
+assume role options
+    - returns a set of temporary security credentials that you can use to access aws resources that you might not normally have access to 
+iam access analyzer
+    - provides policy checks that help you proactively validates policies when creating them 
+
+// LESSON 2 - S3 (Simple Storage Service): for object storage or dataa lake 
+
+
+// LESSON 3 - RDS (Relational Database Service): for oltp database, column oriented database 
+
+// LESSON 4 - REDSHIFT: for data warehousing, column oriented database  
+
+// LESSON 5 - EC2 (Elastic Cloud Compute): for computing service
+definition 
+    - creating an instance of calculation in another computer 
+    - easily scalable, you only pay for what you use, does not require any hardware units, you have complete control and highly secure 
+    
+
+
+// LESSON 6 - LAMBDA: for serverless computing service 
+
+// LESSON 7 - SNS: for sending messages/notifications 
+
+// LESSON 8 - CLOUDWATCH: for performance monitoring, or billing monitoring 
+
+// LESSON 9 - BUDGET 
+

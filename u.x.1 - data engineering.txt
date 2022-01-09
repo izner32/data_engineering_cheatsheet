@@ -1,4 +1,4 @@
-// LESSON 1.0 - INTRO TO DATA ENGINEERING 
+// LESSON 1.1 - INTRO TO DATA ENGINEERING 
 UNFINSIHED - data stores 
     example table 
         table: Bonuses
@@ -19,7 +19,7 @@ UNFINSIHED - data stores
         - tables are stored as column 
         - data accessing happens column by column 
         - read easily because 
-        - best suited for olap
+        - best suited for olap(analytical queries )
         - examples are redshift,mariadb
         - data are stored like this: 
             1,2,3;Doe,Smith,Beck;John,Jane,Sam;8000,4000,1000;
@@ -37,6 +37,10 @@ UNFINSIHED - data stores
         - each key has a value that could contain any type of binary object (text,video,json document,etc.)
         - best suited for oltp 
         - data are stored like this: 
+        //  key : value 
+            key1 : { "ID":1, "Last":"Doe", "First":"John", "Bonus":8000}
+            key2 : { "ID":2, "Last":"Smith", "First":"Jane", "Bonus":4000}
+            key3 : { "ID":3, "Last":"Beck", "First":"Sam", "Bonus":1000}
             
     document (nosql)
         - similar to key value but in this case a value is a single document(json,xml,bson) that stores all data related to a specific key 
@@ -65,21 +69,73 @@ UNFINSIHED - data stores
                     "Bonus": 1000
                 }
     graph (nosql)
-        
         - best suited for oltp 
         - data are stored like this: 
-
-// LESSON 1.1 - STORAGE,RAM,DISK, EVERYTHING YOU NEED TO KNOW TO UNDERSTAND SAVING MEMORY AND WHY IS IT IMPORTANT IN DATA ENGINEERING 
+hardware 
+    cpu 
+        - brain of computer 
+        - fastest
+        - 200x faster than memory 
+    memory 
+        - scratch paper of computer, temporary storage, data is lost when there is an unexpected power loss 
+        - 2nd fastest 
+        - 15x faster than ssd(storage)
+        - fast because they require fewer cpu instruction 
+    storage(ssd)
+        - used for keeping data over long periods of time 
+        - 3rd fastest 
+        - 20x faster than network 
+    network
+        - gateway for anything that you need that isn't stored on your computer 
+        - slowest 
+what is big data 
+    - you could consider something as big data if instead of working on a single machine, you're using a distributed of multiple computers perhaps dozens or hundred of servers you rent from amazon aws
+    - big data has no clear defined definitions 
+types of data file 
+    csv(comma separated value)(row oriented): each value in a table is separated by comma 
+        - best for reading file content but very bad for create/update/delete, for crud operations use row oriented db such as postgresql 
+    xlsx: tabular format | excel file 
+        - lame database, you could do much more thing efficiently with sql/nosql/newsql 
+    parquet: column oriented storage, just like csv but stored in a column way
+        - best for reading file content but very bad for create/update/delete, for crud operations use column oriented db such as newsql 
+        - if you store parquet file in s3 you could read it with aws athena 
+    sql: tabular format that has relationship with other tables and column has defined datatypes and constraints(primary keys,not null, etc.)
+    json/xml: key value pair, just like object in js and dictionary in python 
+        - typically used in nosql db 
+data pipeline 
+    definition 
+        - series of step in which data is processed 
+    example of data pipeline: pretend we work at a bikeshare company and want to email customers who don't complete a purchase 
+        - load application event data from a source such as s3 or kafka 
+        - load the data into an analytic warehouse(data warehouse) such as redshift 
+        - validate the number of rows in redshift match the number of records in s3 
+        - do business analysis 
+        - validate that all lcoations have a daily visit average greater than 0 
+        - validate that the number of locations in our output table match the number of tables in the input table 
+    example of data pipeline represented in dag 
+        node1: s3 -> redshift 
+        node2: redshift analysis 
+        node3: deliver data 
+data validation 
+    definition 
+        - process of ensuring that data is present, correct and meaningful
+dbms vs dataframe 
+    - dbms uses database, in which you need to design first and create tables 
+    - dataframes, you don't need to create tables anymore, but mostly dataframe is used for analysis or data transformation on relational data 
+    - dbms is most suited for creating,updating,deletion of data 
+    - dataframes like spark are most suited for data transformation 
+        - dataframes in spark are built under rdd which means rdd are much faster, that's why for certain transformation rdd seems to be much better '
+        
 
 // LESSON 2.1 - DATA ENGINEERING FLOW (HIGH LEVEL) - with oltp and data warehouse 
 - determine type of data store: row oriented/document/key-value/column family/graph
 - determine type of operational database: sql or nosql | PREFERRED: sql or nosql as long as it is not column oriented - postgresql, mongodb
-- determine type of database for data warehousing: sql or nosql or cloud | PREFERRED: column oriented - aws redshift 
+- determine type of database for data warehousing: sql or nosql or cloud | PREFERRED: column oriented sql - aws redshift 
 - data warehouse design: bottom up or top down | PREFERRED: bottom-up is the most common 
 
 // LESSON 2.1.4 - OLTP FLOW (HIGH LEVEL)
 - determine type of data store: row oriented is the best since it's fast at create,update,delete transactions, but you could still use nosql data stores 
-- determing type of database
+- determing type of database: study cap theorem to learn more when determining the proper database 
     sql/rdbms (PREFERRED for small to med data + structured + must be acid compliant)
         operational database (oltp) data modeling + database design: database to keep the business running | technically not a part of data engineering but this is good to know 
             - understanding business
@@ -106,10 +162,17 @@ UNFINSIHED - data stores
         - sources(usually oltp)
         - el(extract,load) 
             -> staging area (temporary storage can be s3, after a few weeks can be moved into cheaper archive like glacier) | purpose of staging area is so we have a backup if we made a data cleaning mistake, without having to get the data from the source again) 
+                -> etl -> data warehouse 
+                -> etl -> data mart 
+                -> analysis by business analysts for creating reports and business intelligence 
                 or 
-            -> data lake: (common is s3) read this https://qmetrix.com.au/data-lake-vs-staging-layer-difference/
-        - etl -> data warehouse 
-        - etl -> data mart 
+            -> data lake: (common is s3 or hdfs) read this https://qmetrix.com.au/data-lake-vs-staging-layer-difference/
+                - although you could organize different folders and files before placing it in a data lake, just don't touch the content of the file 
+                - data is stored as is, if the data is a json file then don't touch any of its content 
+                -> amazon emr cluster for spark transformations 
+                -> load back to s3 
+                -> use data as analysis for business analysts, ml engineers, data scientists | use it for machine learning, graph analytics, data exploration,creating reports or business intelligence 
+        
     data warehousing(olap) | bottom up approach: database for analytical queries | this uses three tier architecture
         - 
 
@@ -118,6 +181,32 @@ UNFINSIHED - data stores
 // LESSON 3.1.4 - OLTP FLOW (LOW LEVEL)
 
 // LESSON 3.1.8 - DATA WAREHOUSE FLOW (LOW LEVEL)
+
+// LESSON X.1 - SSIS 
+data integration 
+    - refers to the technical and business processes used to combine data from multiple sources to provide a unified, single view of the data.
+ssis 
+    - uses data integration    
+
+// LESSON X.2 - DATA PROCESSING 
+batch processing 
+    - scheduled processing (e.g. processing data at every 12pm everyday)
+    - collection of data is being processed 
+    - tool: airflow for scheduler, spark for data transformation 
+    - high level flow: data -> transform data with spark -> database | this flow is scheduled using airflow 
+stream processing 
+    - real time processing (e.g. processing data continously non stop)
+    - continous data is being processed 
+    - tool: kafka 
+    - high level flow: data -> kafka topic (inside it use spark to transform data) -> based on different events, it might have different result thus resulting to different actions  -> database | this flow is happening continously using kafka                                                           
+micro batch processing 
+    - collection of data and processing continously in short span of time (e.g. processing data at every short span of time continously)
+
+// LESSON X.3 - DATA LAKE 
+
+// LESSON X.4 - CACHING 
+- think of it as a temporary storage but with limited space 
+- here's an analogy: you wanted some books from the library, instead of going to library everytime you wanted a new book, you just grab the books that you need place it in your table so you could have faster access to them but then you have limited space compared to library but then you could access the book you wanted much faster 
 
 // LESSON 1.4 - CONCEPTS 
 - testing in python 
@@ -134,8 +223,8 @@ UNFINSIHED - data stores
     - keys 
 - etl/elt/el 
 - data processing 
-    - batch 
-    - streaming 
+    - batch (airflow + spark)
+    - streaming (kafka)
 - sql/nosql 
     - rdbms 
     - document/key-value/columnar/graph - nosql databases 
