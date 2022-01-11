@@ -22,25 +22,185 @@ assume role options
 iam access analyzer
     - provides policy checks that help you proactively validates policies when creating them 
 
-// LESSON 2 - S3 (Simple Storage Service): for object storage or dataa lake 
+// LESSON 2 - S3 (Simple Storage Service): for object storage or data lake
+feature 
+    - for storing data file, somehow like a github repository 
+buckets 
+    - are like directories where it could contain different files 
+objects 
+    - are like files 
+data consistentency model 
+storage classes 
+    storage classes for frequently accessed objects 
+        - s3 standard 
+    storage classes for infrequently accessed objects 
+        - s3 standard_ia: for long lived, but less frequently accessed data 
+        - s3 onezone_ia: stores the object data in only one availability zone 
+    amazon s3 intelligent tiering: storage class designed for customers who want to optimize storage costs automatically when data access patterns change
+    glacier 
+        - for long term archive 
+s3 api 
+    rest: use standard http requests to create, fetch, and delete buckets and objects 
+    aws sdk: example is aws boto, this is used to connect to aws services and one of those services is s3 
+pricing 
+    - charges you only for what you actually use, with no hidden fees and no overage charges 
+    - no charge for creating a bucket, but only for storing objects in the bucket and for transferring objects in and out of the bucket 
 
-
-// LESSON 3 - RDS (Relational Database Service): for oltp database, column oriented database 
+// LESSON 3 - RDS (Relational Database Service): for oltp database, row oriented database 
+features 
+    - runing your rdbms (e.g. postgresql,mysql) in cloud and take advantage of cloud 
+db engine 
+    - aurora, mysql, mariadb, postgresql, oracle, microsft sql server 
+db instance: isolated database running in the cloud | one instance - one database 
+    class types: you can chagne the cou and memory available to a db instance by changing its db instance class 
+        - standard 
+        - memory optimized 
+        - burstable performance 
+rds storage auto scaling: automatically scales storage capacity in response to growing database workloads, with zero downtime 
+security 
+    security groups 
+        - db security groups: controls access to a db instance that is not in a vpc 
+        - vpc security groups: controls access to a db instance inside a vpc 
+        - ec2 security groups: controls access to an ec2 instance and can be used with a db instance 
 
 // LESSON 4 - REDSHIFT: for data warehousing, column oriented database  
+features 
+    - for data warehousing, can handle big data and is a column oriented database 
+components 
+    cluster: set of nodes, which consists of a leader node and one or more computer nodes 
+        - single cluster could contain multiple databases 
+    redshift nodes 
+        leader node: receives queries from client applications, parses the queries, and develops query execution plans
+        compute node: execute the query execution plans and transmit data among themselves to serve these queries 
+    parameter groups: a group of parameters that apply to all of the databases that you create in the cluster 
+database querying options: connect to your cluster and run queries on the aws management console with the query editor 
+enhanced vpc routing: you can use vpc features to manage the flow of data between your cluster and other resources 
+redshift spectrum: enables you to run queries against exabytes of data in s3 without having to load or transform any data 
+redshift data sharing: secure way to share live data across redshift clusters within an aws account 
+redshift cross-database query: provide the ability to query across databases in a redshift cluster, regardless of hich database you are connected to 
+cluster snapshopts: point in time backups of clusters, snapshots are stored in s3 using ssl 
+security
+    - by default, an amazon redshift cluster is only accessible to the aws acount that creates the cluster 
+pricing 
+    - you pay a per-second billing rate based on the type and number of nodes in your cluster 
 
 // LESSON 5 - EC2 (Elastic Cloud Compute): for computing service
-definition 
-    - creating an instance of calculation in another computer 
-    - easily scalable, you only pay for what you use, does not require any hardware units, you have complete control and highly secure 
-    
-
+features   
+    - is a virtual machine - pretty much just like a physical computer, you get to do everything that you can do with your regular computer 
+    - since this is not serverless, it gives you an ctual os to work with such as linux or windows 
+    - provides scalable computing capacity in the aws cloud 
+instance states 
+    - start: run your instance normally, you are continously billed while your instance is running  
+    - stop: normal instance shutdown, you may restart it again anytime 
+    - hibernate: suspend-to-disk, hibernation saves the contents from the instance memory (ram) to your amazon ebs root volume. when you start your instance again, the ebs root volume is restored to its previous state 
+    - terminate: instance performs a normal shutdown and gets deleted 
+root device volumes: contains the image used to boot the instance 
+    instance store backed instances
+        - any data on the instance store volumes is deleted when the instance is terminated or if it fails
+    amazon ebs backed instances 
+        - can be stopped and later restarted without affecting data stored in the attached volumes 
+ami 
+    - provides the information required to launch an instance 
+    - in other words, create our own image (like in docker) that we could use to create our instances 
+security 
+    - use iam to control access to your instances 
+    - security group acts as a virtual firewall that controls the traffic for one or more instance 
+instance metadata and user data 
+    - instance metadata is data about your instance that you can use to configure or manage the running instance 
+placement groups: can launch or start instance in this, which determines how instances are placed on underlying hardware 
 
 // LESSON 6 - LAMBDA: for serverless computing service 
+features 
+    - executes your code only when needed and scales automatically 
+    - perfect for event driven programming 
+    - ec2 instance runs not just a full copy of an operating system, but a virtual copy of all the hardware that the oprating system needs to run
+        - in contrast, aws lambda requires is enough system resources and dependencies to run a specific program 
+components of a lambda application 
+    function: a script or program that runs in lambda  
+    runtimes: allow functions in different language to run in the same base execution environent 
+    layers: are a distribution mechanism for libraries, custom runtimes, and other function dependencies
+    event source: aws service or a custom service that triggers your function and execute its logic 
+    downstream resources: an aws service that your lambda function calls once it is triggered 
+    log streams: while lambda automatically monitors your function invocations and reports metrics to CloudWatch, you can annotate your function code with custom logging statements that allow you to analyze the execution flow and performance of your Lambda function
+lambda functions 
+    - you upload your application code in the form of one or more lambda functions, lambda stores code in amazon s3 and encrypts it at rest 
+invoking functions 
+    - lambda supports synchronous and asynchronous invocation of a lambda function 
+    - an event source is the entity that publishes events, and a lambda function is the custom code that processes the events 
+configuring a lambda function to access resources in a vpc 
+    - in aws lambda, you can set up your function to establish a connection to your virtual private cloud (vpc)
+pricing 
+    - you are charged based on the total number of requests for your functions and the duration, the time it takes for your code to execute 
+        - basically when your piece of code is being used 
 
 // LESSON 7 - SNS: for sending messages/notifications 
+features 
+    - web service that makes it easy to set up, operate, and send notifications from the cloud  
+    - an event driven computing hub that has native integration with a wide variety of aws event sources (including ec2, s3, and rds)
+    message filtering: allows a subscriber to create a filter policy, so that it only gets the notifications it is interested in 
+    message fanout: occurs when a message is sent to a topic and then replicated and pushed to multiple endpoints 
+    sns mobile notifications: allows you to fanout mobile push notifications to ios, android, fire os, etc. 
+    application and system alerts: notifications, triggered by predefined thresholds, sent to specified users by sms and/or email 
+    push email and text mesaging: two ways to transmit messages to individuals or groups via email and/or sms 
+publishers and subscribers 
+    publishers
+        - communicate asynchronously with subscribers by producing and sending a message to a topic 
+        - create topics to send messages 
+    subscribers
+        - consume or receive the mssage or notification 
+        - subscribe to topics to receive messages 
+sns topics 
+    - instead of including a specific destination address in each message (e.g. email address), a publisher sends a message to a topic 
+    - sns matches the topic to a list of subscribers who have subscribed to that topic and delivers the message to each of those subscribers 
+message attributes 
+    - sns supports delivery of message attributes, these are time stamps, geospatial data, signatures, and identifiers about the message 
+    - these are optional and seperate from but sent along with the message body
+message filtering 
+    - filter policy - contains attributes that define which messages the subscriber receives 
+raw message delivery 
+    - by default, messages are delived encoded in json that provides metadata about the message and topic
+user notifications 
+    - you have the ability to send push notification messages directly to apps on mobile devices 
+sns delivery retries 
+    - all messages sent to sns are processed and delivered immediately, if a message cannot be successfully delivered on the first attempt, sns implements a 4 phase retry policy 
+monitoring 
+    - using cloudwatch 
+limits 
+    - by default sns offers 10 million subscriptions per topic, and 100,000 topics per account 
 
 // LESSON 8 - CLOUDWATCH: for performance monitoring, or billing monitoring 
+features 
+    - monitoring tool for you aws resources and applications 
+    - display metrics and create alarms that watch the metrics and send notifications or automatically make changes to the resources you are monitoring when a threshold is breached 
+cloudwatch concepts 
+    namespaces: container for cloudwatch metrics 
+    metrics: represents a time-ordered set of data points that are published to cloudwatch 
+    dimensions: a name/value pair that uniquely identifies a metric 
+    statistics: metric data aggregations over specified periods of time 
+    percentiles: indicates the relative standing of a value in a dataset 
+    alarms: watches a single metric over a specified time perdiod, and performs one or more specified actions 
+cloudwatch dashboard: customizable home pages in the cloudwatch console that you can use to monitor 
+cloudwatch events (amazon eventbridge): deliver near real-time stream of system events that describe changes in aws resources
+cloudwatch logs: enables you to see all of your logs, regardless of their source, as a single and consistent flow of events ordered by time 
+cloudwatch agent: collect internal system level metrics from amazon ec2 instances across operating systems 
+authentication and access control 
+    - use iam users or roles for authentication who can access 
+pricing 
+    - it aint free 
 
 // LESSON 9 - BUDGET 
-
+features 
+    - set custom budgets that alert you when your costs or usage exceed or are forecasted to exceed your budgeted amount 
+    view the ff information with aws budget 
+        - how close your plan is to your budgeted amount or to the frfee tier limits 
+        - your usage to date, including how much you have used of your Reserved Instances and purchased Savings Plans
+        - your current estimated charges from aws and how much your predicted usage will incur in charges by the end of the month 
+        - how much of your budget has been used 
+types of budgets 
+    cost budgets: plan how much you want to spend on a service 
+    usage budgets: plan how much you want to use one or more services 
+    ri utilization budgets: define a utilization threshold and receive alerts when your ri usage falls below that threshold 
+    ri coverage budgets: define a coverage threshold and receive alerts when the number of your instance hours that are covered by RIs fall below that threshold
+important note
+    - budget alerts can be sent via email and/or amazon sns topic 
+    - first two budgets created are free of charge 
