@@ -343,6 +343,22 @@ alter trigger
 enable triger: allows a trigger or all triggers related to a table  
 disable trigger: disallow a trigger or all triggers related to a table 
 
+// LESSON 1.11 - PROCEDURE: kinda like udf but procedure doesn't return anything while a function does, procedure's main purpose is to perform something 
+create procedure 
+    CREATE PROCEDURE procedure_name(character varying)
+    LANGUAGE 'plpsql'
+    AS $$ 
+    BEGIN 
+        SELECT name,age 
+        FROM table_name;
+        WHERE row = $1
+        COMMIT; 
+    END;
+    $$;
+
+    // explicitly invoking the procedure 
+    CALL procedure_name('eleven')
+
 // UNFINISHED - LESSON 1.11 - INDEXES: used to enhance the retrieval of data from the databases | indexes tend to help the database server to identify the defined rows much faster than it could do without indexes 
 index features 
     - enhance the data output speed with select and where 

@@ -86,10 +86,14 @@ pricing
 
 // LESSON 5 - EC2 (Elastic Cloud Compute): for computing service
 features   
-    - is a virtual machine - pretty much just like a physical computer, you get to do everything that you can do with your regular computer 
-    - since this is not serverless, it gives you an ctual os to work with such as linux or windows 
+    - instance of ec2 is equal to a single virtual server 
+        - servers enable you to control, distribute and protect information to multiple clients 
+            - there are two types of servers: physical and virtual server 
+                - physical server is a dedicated server which uses traditional cpu and ram to perform the task calculations 
+                - virtual server uses hypervisor to divide the physical server into 2 or more virtual servers, in that way other people could share the resources (in this case aws owns the physical server that uses hypervisors and we are the other people)
+    - since this is not serverless, it gives you an actual os to work with such as linux or windows 
     - provides scalable computing capacity in the aws cloud 
-instance states 
+instance states
     - start: run your instance normally, you are continously billed while your instance is running  
     - stop: normal instance shutdown, you may restart it again anytime 
     - hibernate: suspend-to-disk, hibernation saves the contents from the instance memory (ram) to your amazon ebs root volume. when you start your instance again, the ebs root volume is restored to its previous state 
@@ -99,18 +103,45 @@ root device volumes: contains the image used to boot the instance
         - any data on the instance store volumes is deleted when the instance is terminated or if it fails
     amazon ebs backed instances 
         - can be stopped and later restarted without affecting data stored in the attached volumes 
-ami 
+ami: think of it as like saving a snapshot or a copy of your server and you could use this copy to create another instance 
     - provides the information required to launch an instance 
     - in other words, create our own image (like in docker) that we could use to create our instances 
+auto scaling Groups: collection of ec2 instances that are treated as a logical grouping for the purposes of automatic scaling and managemnet
+    - when launching auto scaling groups it looks similar to launching ec2 instance 
+    - deleting auto scaling groups would tear down the instances that comes with it 
+elastic load balancer
+    - the idea is when traffic comes into your web application, it's going to flow through the load balancer and it's going to evenly distribute that traffic to multiple instances 
+    - deleting load balancer doesn't tear down the instances that comes with it unlike in auto scaling groups 
+    types of load balancer 
+        application load balancer: this is probably going to be your typical choice 
+        network load balancer 
+        classic load balance 
 security 
     - use iam to control access to your instances 
     - security group acts as a virtual firewall that controls the traffic for one or more instance 
 instance metadata and user data 
     - instance metadata is data about your instance that you can use to configure or manage the running instance 
 placement groups: can launch or start instance in this, which determines how instances are placed on underlying hardware 
+pricing 
+    on demand (least commitment) 
+        - for first time apps 
+        - charged by the hour 
+        - use case: short term, spiky, unpredictable workloads, first time apps 
+    spot (biggest savings)
+        - for non-critical background jobs 
+        - use case: steady state or predictable usage 
+    reserved (best long term savings)
+        - unused reserved instances can be resold 
+        - designed for applciations that have a steady-state, predictable usage, or require reserved capacity 
+        - use case: can handle interruptions (server randomly stopping and starting)
+        - use case: for non critical background jobs 
+    dedicated (most expensive)
+        - use case: when you need a guarantee of isolate hardware (enterprise requirements)
 
 // LESSON 6 - LAMBDA: for serverless computing service 
 features 
+    - you just write your code and it will run but the tradeoff is that they can only run for up to 15 minutes 
+    - they're pretty much just like running your small script in vscode 
     - executes your code only when needed and scales automatically 
     - perfect for event driven programming 
     - ec2 instance runs not just a full copy of an operating system, but a virtual copy of all the hardware that the oprating system needs to run
@@ -199,8 +230,271 @@ features
 types of budgets 
     cost budgets: plan how much you want to spend on a service 
     usage budgets: plan how much you want to use one or more services 
-    ri utilization budgets: define a utilization threshold and receive alerts when your ri usage falls below that threshold 
-    ri coverage budgets: define a coverage threshold and receive alerts when the number of your instance hours that are covered by RIs fall below that threshold
+    reservation
+        ri utilization budgets: define a utilization threshold and receive alerts when your ri usage falls below that threshold 
+        ri coverage budgets: define a coverage threshold and receive alerts when the number of your instance hours that are covered by RIs fall below that threshold
 important note
     - budget alerts can be sent via email and/or amazon sns topic 
     - first two budgets created are free of charge 
+
+// LESSON 10 - AWS TRUSTED ADVISOR 
+features 
+    - get the best advice on how to save things when using aws services 
+
+// LESSON 11 - AWS COST EXPLORER 
+features 
+    - lets you visualize, understand, and manage your aws costs and usage over time 
+    - you can use forecasting to get an idea of future costs
+
+// LESSON 12 - AWS PRICING CALCULATOR 
+
+// LESSON 13 - GLUE 
+
+// LESSON 14 - EMR
+
+// LESSON 15 - BATCH 
+
+// LESSON 16 - AURORA 
+
+// LESSON 17 - CLOUDFRONT 
+
+// LESSON 18 - AWS LANDING ZONE 
+
+// LESSON 19 - AWS RESOURCE GROUPS: a way to group your aws resources (e.g. ec2 instances)
+features 
+    - helps you organize and consolidate information based on your project and the resources that you use 
+    - tags are words or phrases that act as metadata for organizing your aws resources 
+    - resource groups are a collection of resources that share one or more tags 
+
+// LESSON 20 - AWS QUICKSTART 
+features 
+    - prebuilt templayes by aws and aws partners to help you deploy popular stacks on aws - reduce hundreds of manual procedures into just a few steps 
+quick start parts 
+    - reference architecture for the deployment 
+    - aws cloudformation templates that automate and configure the deployment 
+    - a deployment guide explaining the architecture and implementation in detail 
+
+// LESSON 21 - AWS COST AND USAGE REPORT 
+features 
+    - generate a detailed spreadsheet, enabling you to better analyze and understand your aws costs 
+steps for usage 
+    - place the reports into s3 
+    - use aws athena to turn the report into a queryable database 
+    - use quicksight to visualize your billing data on graph 
+
+// LESSON 22 - AWS ORGANIZATIONS 
+- create an organization to manage the accounts better
+key concept
+    organizations: allows you to centrally manage billing, control acess, compliance, security, and share resources across your aws account 
+    root account user: single sign in identity that has complete access to all aws services and resources in an account 
+    organization units: group of aws accounts within an organization whihc can also contain other organizational units - creating a hierarchy 
+    service control policies: give central control over the allowed permissions for all accounts in your organization 
+
+// LESSON 23 - AWS NETWORKING 
+
+// LESSON 23 - ATHENA 
+
+// LESSON 24 - QUICKSIGHT 
+
+// LESSON X.1 - MAP OVERVIEW OF AWS 
+regions: physical location in the world with multiple availabiltiy zones 
+    - every region is physically isolated from and independent of every other region in terms of location, power, water supply, etc. 
+    - each region has at least two availability zones 
+    - aws largest region is us-east 
+    - not all services of aws is available in a specific region 
+availability zones(AZs): one or more discrete data centers 
+    - AZs are represented by a region code, followed by a letter identifier e.g. us-east-1a
+edge locations: data centers owned by a trusted partners of aws 
+    - this allows for low latency no matter where the end user is geographyically located 
+govCloud regions
+    - allows customer to host sensitive controlled unclassified information and other types of regulated workloads 
+    - are only operated by employees who are U.S. citizens, on U.S. soil 
+    - used if you want to build something and sell it to the government or government related industries
+
+// LESSON X.2 - AWS FREE SERVICES 
+- IAM 
+- amazon vpc 
+- auto scaling 
+- cloudformation 
+- elastic beanstalk 
+- opsworks 
+- amplify 
+- appsync 
+- codestar 
+- organizations & consolidated billing 
+- aws cost explorer 
+
+// LESSON X.3 - THINGS TO LOOK OUT FOR WHEN ABOUT TO USE A SERVICE 
+- organization: what organization would the user belong to 
+- iam user: create a user that'd be using the service 
+- iam role: set a rule on how they'd be able to access the service 
+- pricing: determine the price of the service 
+- aws service: choose what aws service you'd like to use 
+- set a budget: set a threshold on how much you're willing to spend 
+- aws trusted advisor: identify how you could cheapen the cost further 
+- aws cost explorer: visualize your cost and usage over time 
+- cloudwatch: monitor your performance 
+
+// LESSON X.4 - COMPUTE SERVICES 
+IMPORTANT - elastic cloud computing (ec2): highly configurable server e.g. cpu,memory,network,os for cloud computing 
+    - like digital ocean 
+IMPORTANT - lambda: serverless functions run code without provisioning or managing servers, you pay only for the compute time you consume 
+    - like heroku 
+elastic container registry (ecr): filly managed container registry offering high performance hosting, so you can reliably deploy application images and artifacts anywhere 
+    - like docker 
+elastic container service (ecs): container orcherstration playform, and a managed service that operates it and provisions hardware resources 
+    - like jelastic multi-cloud paas 
+elastic kubernetes service (eks): kubernetes as a service, easy to deploy, manage, and scale containerized applications using kubernetes 
+    - like kubernetes 
+lightsail: just like ec2 but it's less configurable then ec2 but then it's easier to deploy and estimate costs 
+    - like digital ocean 
+batch: plans, schedule, and executes your batch computing workloads across the full range of aws compute services and features such as amazon ec2 and spot instances 
+    - like flux 
+elastic beanstalk: orchestates various aws services, including ec2, s3, sns, cloudwatch, autoscaling and elastic load balanacers 
+    - like heroku
+fargate: serverless, pay-as-you-go compute engine that lets you focus on building applications without managing servers 
+    - like rancher 
+parallelcluster: makes it easy for you to deploy and manage high performance computing clusters on aws 
+serverless application model (sam): framework for building serverless applications 
+elastic fabric adapter (efa): network interface for Amazon EC2 instances that enables customers to run applications requiring high levels of inter-node communications at scale on AWS
+
+// LESSON X.5 - STORAGE SERVICES 
+IMPORTANT - s3 (simple storage service): object storage 
+    - like github, like a repository 
+s3 glacier: low cost storage for archiving and long term backup
+    - like s3, but you have to wait for hours to access the file 
+ebs - elastic block storage: hard drive in the cloud you attach to ec2 instances, you could attach ssd or hhd  
+    - hard drive, but in the cloud in ec2 instance 
+efs - elastic file storage: file storage mountable to multiple ec2 instances at the same time 
+    - like cyberduck 
+fsx:  lets you optimize your price and performance to support a broad spectrum of use cases, from small user shares to the most demanding compute-intensive workload. fsx also offers SSD or HDD storage options and lets you provision and scale throughput performance independently from storage capacity
+    - like cyberduck 
+storage gateway: hybrid cloud storage with local caching 
+    - like storpool
+transfer family: securely scales your recurring business-to-business file transfers to Amazon Simple Storage Service (S3) and Amazon Elastic File System (EFS) using SFTP, FTPS, and FTP protocols
+
+// LESSON X.6 - DATABASE SERVICES 
+IMPORTANT - rds: relational database service that supports multiple engines like mysql,postgres,etc.
+    aurora: mysql(5x faster) and psql(3x faster) database fully managed 
+    aurora serverless: only runs when you need it, like aws lambda 
+IMPORTANT - redshift: columnar database, petabyte warehouse for data warehousing 
+    - like snowflake 
+dynamodb: nosql wide column 
+    - like cassandra 
+document db: nosql document database that is mongodb compatible 
+    - like mongodb 
+neptune: managed graph database 
+    - like neo4j 
+elasticache: nosql keyvalue database 
+    - like redis 
+quantum ledger database: fully managed ledger database that provides a transparent, immutable, and cryptographically verifiable transaction log owned by a central trusted authority
+    - like mongodb atlas 
+
+// LESSON X.7 - MIGRATION SERVICES 
+IMPORTANT - database migration service: helps you migrate databases to aws quickly and securely  
+datasync: online service that automates and accelerates moving data between on-premises and AWS storage services
+server migration service:  an agentless service which makes it easier and faster for you to migrate thousands of on-premises workloads to AWS
+snowball: physically migrate lots of data via a computer suitcase 50-80 tb (what's happening is you migrate your data into the suitcase and that suitcase would be delivered to aws directly into s3)
+    snowball edge: like snowball but 100tb 
+    snowmobile: shipping container, pulled by a semi trailer truck - 100pb
+
+// LESSON X.8 - NETWORKING AND CONTENT DELIVERY SERVICES 
+IMPORTANT - cloudfront: let's say you have files(like videos) that you want to share across the world and you want those to load as quickly as possible 
+    - like cloudflare cdn 
+api gateway: fully managed service that makes it easy for developers to create, publish, maintain, monitor, and secure APIs at any scale
+    - like kong 
+route 53: it is designed to give developers and businesses an extremely reliable and cost effective way to route end users to Internet applications by translating names like www.example.com into the numeric IP addresses like 192.0.
+    - like cloudflare cdn 
+direct connect: provides an alternative to using the internet to utilize aws cloud services 
+elastic load balancing: automatically distributes incoming application traffic across multiple targets and virtual appliances in one or more Availability Zones 
+    - like traefik 
+global accelerator: a networking service that improves the performance of your users' traffic by up to 60% using Amazon Web Services' global network infrastructure
+    - like datadog 
+transit gateway: connects VPCs and on-premises networks through a central hub
+vpc peering: enables you to launch AWS resources into a virtual network that you've defined.
+
+// LESSON X.9 - SECURITY AND IDENTITY SERVICES 
+IMPORTANT - organizations: an account management service that enables you to consolidate multiple AWS accounts into an organization that you create and centrally manage
+IMPORTANT - identity and access management (iam): With IAM, you can specify who can access which services and resources, and under which conditions
+cognito: provides solutions to control access to AWS resources from your app
+detective: makes it easy to analyze, investigate, and quickly identify the root cause of security findings or suspicious activities
+guardduty: threat detection service that continuously monitors your AWS accounts and workloads for malicious activity and delivers detailed security findings for visibility and remediation
+inspector: automated vulnerability management service that continually scans AWS workloads for software vulnerabilities and unintended network
+macie: fully managed data security and data privacy service that uses machine learning and pattern matching to discover and protect your sensitive data in AWS
+artifact: your go-to, central resource for compliance-related information that matters to you
+certificate manager: lets you easily provision, manage, and deploy public and private Secure Sockets Layer/Transport Layer Security (SSL/TLS) certificates for use with AWS services and your internal connected resources
+directory service: makes it easy to set up and run directories in the AWS Cloud, or connect your AWS resources with an existing on-premises Microsoft Active Directory
+key managemetn service (kms): gives you centralized control over the cryptographic keys used to protect your data
+resource access manager(ram): helps you securely share your resources across AWS accounts, within your organization or organizational units (OUs) in AWS 
+secrets manager: helps you protect secrets needed to access your applications, services, and IT resources
+security hub: loud security posture management service that automates best practice checks, aggregates alerts, and supports automated remediation
+shield: managed Distributed Denial of Service (DDoS) protection service that safeguards applications running on AWS
+waf: web application firewall that helps protect your web applications or APIs against common web exploits and bots that may affect availability, compromise security, or consume excessive resources
+
+// LESSON X.10 - MANAGEMENT TOOLS
+IMPORTANT - cloudwatch: a monitoring and management service that provides data and actionable insights for AWS, hybrid, and on-premises applications and infrastructure resources
+IMPORTANT - trusted advisor: provides recommendations that help you follow AWS best practices, also recommends cost cutting thing-to-do
+auto scaling: lets you build scaling plans that automate how groups of different resources respond to changes in demand
+cloudformation: service that allows you to easily model, provision, and manage AWS and third-party resources
+cloudtrail: helps you enable governance, compliance, and operational and risk auditing of your AWS account
+config: enables you to assess, audit, and evaluate the configurations of your AWS resources
+health: provides ongoing visibility into your resource performance and the availability of your AWS services and accounts
+management console: web application that comprises and refers to a broad collection of service consoles for managing Amazon Web Services
+opsworks: configuration management service that provides managed instances of Chef and Puppet. Nevermind this, this is for devops 
+service catalog: allows organizations to create and manage catalogs of IT services that are approved for use on AWS
+systems manager: provides configuration management, which helps you maintain consistent configuration of your Amazon EC2 or on-premises instances
+
+// LESSON X.11 - ANALYTICS SERVICES 
+IMPORTANT - glue: serverless data integration service that makes it easy to discover, prepare, and combine data for analytics, machine learning, and application development
+    - like spark but serverless 
+IMPORTANT - athena: for creating sql queries in s3 
+IMPORTANT - kinesis: makes it easy to collect, process, and analyze real-time, streaming data so you can get timely insights and react quickly to new information
+    - like kafka but simpler 
+managed workflows for apache airflow (mwaa): managed orchestration service for Apache Airflow that makes it easier to setup and operate end-to-end data pipelines in the cloud at scale
+    - like airflow 
+cloudsearch: managed service in the AWS Cloud that makes it simple and cost-effective to set up, manage, and scale a search solution for your website or application
+    - like google but in your application/website 
+elasticsearch: for use cases such as log analytics, real-time application monitoring, and click stream analytics
+emr: managed cluster platform that simplifies running big data frameworks, such as Apache Hadoop and Apache Spark , on AWS to process and analyze vast amounts of data
+    - like hadoop 
+quicksight: allows everyone in your organization to understand your data by asking questions in natural language, exploring through interactive dashboards, or automatically looking for patterns and outliers powered by machine learning
+data pipeline: web service that helps you reliably process and move data between different AWS compute and storage services, as well as on-premises data sources, at specified intervals
+
+// EVERYTHING IS IMPORTANT - LESSON X.12 - BILLING AND COST MANAGEMENT 
+bills: see details about your current charges, duh  
+payment history: see your past payment transactions  
+cost and usage report: report provides information about your use of aws resources and estimated costs for that usage 
+cost explorer: helps you visualize, understand, and manage your AWS costs and usage over a daily or monthly granularity
+budgets: set a threshold for your resources whcih would alarm you if you breached or about to breach it  
+
+// LESSON X.13 - DEVELOPER TOOLS 
+codebuild: fully managed continuous integration service that compiles source code, runs tests, and produces software packages that are ready to deploy
+codecommit: secure, highly scalable, managed source control service that hosts private Git repositories
+codedeploy: service that automates code deployments to any instance, including Amazon EC2 instances and instances running on-premises
+codepipeline: fully managed continuous delivery service that helps you automate your release pipelines for fast and reliable application and infrastructure updates
+x-ray: a service that helps developers analyze and debug distributed applications
+
+// LESSON X.14 - APPLICATION SERVICES 
+IMPORTANT - sns: fully managed messaging service for both application-to-application (A2A) and application-to-person (A2P) communication
+sqs: fully managed message queuing service that enables you to decouple and scale microservices, distributed systems, and serverless applications
+simple workflow (swf): makes it easy to build applications that coordinate work across distributed components
+ses: cost-effective, flexible, and scalable email service that enables developers to send mail from within any application
+    - like sns but for sending emails professionaly
+step functions: low-code, visual workflow service that developers use to build distributed applications, automate IT and business processes, and build data and machine learning pipelines using AWS services
+
+// LESSON X.15 - DESKTOP AND APP STREAMING 
+workspaces: cloud-based virtual desktop that can act as a replacement for a traditional desktop 
+
+// LESSON X.16 - MACHINE LEARNING AN AI 
+IMPORTANT - sagemaker:  fully-managed service that enables data scientists and developers to quickly and easily build, train, and deploy machine learning models at any scale
+augmented ai (a2i): machine learning service which makes it easy to build the workflows required for human review
+comprehend: natural-language processing (NLP) service that uses machine learning to uncover valuable insights and connections in text
+elastic inference: resource you can attach to your Amazon EC2 CPU instances to accelerate your deep learning (DL) inference workloads 
+lex: AWS service for building conversational interfaces for applications using voice and text
+personalize: fully managed machine learning service that makes it easy for developers deliver personalized experiences to their users
+polly:  service that turns text into lifelike speech, allowing you to create applications that talk, and build entirely new categories of speech-enabled products
+rekognition: enables your applications to confirm user identities by comparing their live image with a reference image
+textract: machine learning (ML) service that automatically extracts text, handwriting, and data from scanned documents
+transcribe: automatic speech recognition (ASR) service that makes it easy for developers to add speech to text capability to their applications
+translate: neural machine translation service that delivers fast, high-quality, affordable, and customizable language translation
+deeplens: deep-learning enabled video camera for developers of all skill levels to grow their machine learning skills through hands-on computer vision tutorials, example code, and pre-built models

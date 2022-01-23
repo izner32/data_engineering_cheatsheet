@@ -1,0 +1,105 @@
+// LESSON 1 - DOCKER OVERVIEW 
+docker definition 
+    - lightweight virtual machine which has all necessery programs and dependencies in order to run your program
+important docker concepts 
+    images: docker image contains application code, libraries, tools, dependencies and other files needed to make an application run
+        official images: devloped and maintained by the docker team 
+        user images: created by us 
+    containers: running application instance of the image 
+        container port: this is given to each of the container running
+        host port: host means your computer, a host port must only be one - one host port could be binded into multiple container ports 
+    docker daemon: background service running on the host machine, it manages to built the image, running it, and distributing the docker containers 
+    docker hub: place where you could find docker images
+    dockerfile: systematic, efficient, and flexible way to build docker images 
+    docker compose yml: an equivalent of writing docker command 
+    docker volume: your data on your pc while you're using the container is saved into the docker container and data is not lost when you'll be using the container again  
+workflow with docker 
+    -> development 
+    -> continous delivery 
+    -> deployment 
+
+// LESSON 2 - DOCKER COMMANDS 
+docker basic commands 
+    docker ps: shows all of the running docker containers 
+        docker ps -a: shows all of the docker containers including past containers that has already been exited 
+    docker run {image_name}:{version}: start the image in a container, if the image is not yet pulled then pull the image and run it right away | note this is a combination of create and start container
+        docker run -d {image_name}:{version}: start in a detached mode meaning docker container runs in the background of your terminal, you do this if you wanted to run something in your terminal while the container is still running 
+        docker run -p{host_port}:{container_port}: binding host port and container's port 
+        docker run --name {container_name} {image_name}
+    docker create: create container
+    docker exec -it {container_id} /bin/bash: show the terminal for that container 
+    docker volume: create a docker volume
+    docker network: show list of network
+    docker rm {container_id}: delete the container and not just merely stop it 
+    docker images: show list of images 
+    docker rmi: remove image
+    docker build: build a new image from dockerfile
+        docker build -t {dockerfile_name}:{version,you are the one to give a version e.g. 1.0, version-1, etc.}: for building images out of a dockerfile 
+    docker push: push your image to docker repo
+    docker pull: download a docker image locally on the host (your pc)
+    docker commit: create an image from container
+    docker stop {container_id}: stop running the docker container 
+    docker start: start any stopped container 
+    docker logs: shows information logged by a running container  
+    docker-compose 
+        docker-compose -f {docker_compose_name}.yaml up: running docker compose 
+        docker-compose -f {docker_compose_name}.yaml down: ending docker compose 
+
+
+
+
+// LESSON 3 - DOCKER COMPOSE == DOCKER COMMAND: docker compose is in file, docker command is in command line 
+docker compose: code is equivalent to command below 
+    1    version: '3'
+    2    services:
+    3        mongodb: # 2 
+    4            image: mongo # 7
+    5            ports: # -p 
+    6                - 27017:27017 # 3
+    7            environment: # -e
+    8                - MONGO_INITDB_ROOT_USERNAME=admin # 4
+    9                - MONGO_INITDB_ROOT_PASSWORD=password # 5
+docker command: code is equivalent to compose above 
+    1    docker run -d \
+    2    --name mongodb \
+    3    -p 27017:27017 \
+    4    -e MONGO_INITDB_ROOT_USERNAME=admin \
+    5    -e MONGO_INITDB_ROOT_PASSWORD=password \
+    6    --net mongo-network \ # noticed this doesn't have an equivalent to docker compose, it's because network is automatically taken care of in docker compose 
+    7    mongo 
+
+
+// LESSON 4 - DOCKERFILE: systematic, efficient, and flexible way to build docker images 
+dockerfile commands 
+    FROM: To specify the parent image.
+    WORKDIR: To set the working directory.
+    RUN: To set the working directory.
+    COPY: To copy over files or directories from a given location.
+    ADD: Handles URLs and unpack compressed files.
+    ENTRYPOINT: Command that will always be executed when we run the container.
+    CMD: Arguments passed to the entrypoint.
+    EXPOSE: Defining the port to access our container application.
+    LABEL: Add metadata to the image.
+example of dockerfile 
+    FROM node # meaning you're creating a new image built on top of image node 
+    ENV MONGO_DB_USERNAME=admin \ # optionally define env variables, but it's more preferred to define it in a docker compose 
+        MONGO_DB_PWD=password
+    RUN mkdir -p /home/app # execute any command - this command would be belong inside the image 
+    COPY . /home/app # lets you copy in a local directory from the host(your pc) into the docker image itself | "." means everything just like in git add .
+    CMD ["node", "/home/app/server.js"] # entrypoint or starting this image, in this case typing node /home/app/server.js would start the image 
+
+// UNFINISHED - LESSON 5 - DOCKER PRIVATE REPOSITORY 
+cloud private docker repository 
+    - aws ecr 
+
+
+// LESSON 6 - DOCKER VOLUME 
+docker volume 
+    - folder in physical host file system is mounted into the virtual file system of docker 
+    - in other words, your data on your pc while you're using the container is saved into the docker container and data is not lost when you'll be using the container again 
+when do we need docker volumes 
+    - data is gone when restarting or removing a docker container
+    - so if you want your data to be saved to the con
+types of docker volume 
+    docker run -v {host_directory}:{container_directory}
+    docker run -v name:

@@ -1,0 +1,239 @@
+// LESSON 1 - CLOUD CONCEPTS 
+cloud computing
+    - using a network of remote servers hosted on the internet to store,manage, and process data, rather than a local server or a personal computer 
+    - in short, other's computer 
+    without cloud computing 
+        - someone else owns the servers, someone else hires the it people  
+    with cloud computing 
+        - you own the servers, you hire the it people 
+six advantages and benefits of cloud computing
+    - instead of paying for data center and servers, pay on demand (pay only when you consume computing resources)
+    - you are sharing the cost with other customers to get unbeatable savings 
+    - eliminate guesswork about infrastructure capacity needs, instead of paying for idle or underutilized servers, you can scale up or down to meet the current need 
+    - launch resources within a few clicks in minutes 
+    - stop spending money on running and maintaining data centers 
+    - go global in minutes (deploy your app in multiple regions around the world with a few clicks)
+types of cloud computing
+    saas (software as a service) (e.g. gmail, office 365, salesforce) 
+        - for customers 
+        - don't worry about how the service is maintained. it just works and remains available 
+    paas (product as a service) (e.g. heroku)
+        - for developers 
+        - don't worry about provisioning, configuring or understanding the hardware or os 
+    iaas (infrastructure as a service ) (e.g. aws, gcp, ms azure)
+        - for admins 
+        - don't worry about it stuff, data centers and hardware 
+cloud computing deployment models
+    cloud - fully utilized cloud computing 
+        - startups, saas offerings
+    hybrid - using both cloud and on-premise 
+        - used by banks, fintech, investment management 
+    on-premise - deploying resources on-premises using virtualization and resource management tools, also called as private cloud 
+        - super sentisitive data e.g. hospital 
+        - large enterprise with heavy regulation 
+
+// LESSON 2 - AWS OVERVIEW  
+global infrastructure 
+    regions: physical location in the world with multiple availabiltiy zones 
+        - every region is physically isolated from and independent of every other region in terms of location, power, water supply, etc. 
+        - each region has at least two availability zones 
+        - aws largest region is us-east 
+        - not all services of aws is available in a specific region 
+    availability zones(AZs): one or more discrete data centers 
+        - AZs are represented by a region code, followed by a letter identifier e.g. us-east-1a
+    edge locations: data centers owned by a trusted partners of aws 
+        - this allows for low latency no matter where the end user is geographyically located 
+    govCloud regions
+        - allows customer to host sensitive controlled unclassified information and other types of regulated workloads 
+        - are only operated by employees who are U.S. citizens, on U.S. soil 
+        - used if you want to build something and sell it to the government or government related industries
+pricing 
+    aws general pricing
+        - pay as you go
+        - no upfront investment
+        - pay less when you reserve
+        - pay less by using more
+        - pay per use
+        - pay less when aws grows 
+    three fundamental drivers of cost with aws 
+        compute 
+        storage 
+        outbound data transfer 
+aws well architected framework: five pillars 
+    security: ability to protect information, systems, and assets while delivering business value through risk assessments and mitigation strategies  
+        aws services for best practice on security
+            - identity and access management: iam, multi-factor authentication, aws organization 
+            - detective controls: aws cloudtrail , aws config, amazon guardduty 
+            - infrastructure protection: amazon vpc, amazon cloudfront with aws shield, aws waf 
+            - data protection: elb, amazon elastic block store, amazon s3, amazon rds, amazon kms 
+            - incident response: iam, cloudwatch events 
+        key aws service 
+            - iam 
+    reliability:  ability of a system to recover from infrastructure or service disruptions, dynamically acquire computing resources to meet demand, and mitigate disruptions such as misconfigurations or transient network issues 
+        aws services for best practice on reliability 
+            - foundations: iam, amazon vpc, aws trusted advisor, aws shield  
+            - change management: aws cloudtrail, aws config, auto scaling, amazon cloudwatch 
+            - failure management: aws cloudformation, amazon s3, aws kms, amazon glacier  
+        key aws service 
+            - amazon cloudwatch 
+    performance efficiency: ability to use computing resources efficiently to meet system requirements, and to maintain that efficiency as demand changes and technologies evolve
+        aws services for best practice on performance efficiency 
+            - selection: auto scaling for compute, amazon ebs and s3 for storage, amazon rds and dynamodb for database, route 53, vpc, and aws direct connect for network 
+            - review: aws blog and what's new section of the website  
+            - monitoring: amazon cloudwatch  
+            - tradeoffs: amazon elasticache, amazon cloudfront, aws snowball, amazon rds read replias 
+        key aws service 
+            - amazon cloudwatch  
+    operational excellence: ability to run and monitor systems to deliver business value and to continually improve supporting processes and procedures  
+        aws services for best practice on operational excellence 
+            - prepare: aws config 
+            - operator: amazon cloudwatch 
+            - evolve: amazon elasticsearch service 
+        key aws service 
+            - aws cloudformation: for creating templates  
+    cost optimization: ability to avoid or eliminate unneeded cost or suboptimal resources 
+        aws services for best practice on cost optimization 
+            - cost effective resources: cost explorer, amazon cloudwatch and trusted advisor, amazon aurora for rds, aws direct connect with amazon cloudfront 
+            - matching supply and demand: auto scaling 
+            - expenditure awareness: aws cost explorer, aws budgets 
+            - optimizing over time: aws news blog and the what's new section on the aws website, aws trusted advisor 
+        key aws service 
+            - cost explorer 
+aws well architected framework: design principles
+    scalability 
+        scaling horizontally: increase in the number of resources 
+        scaling vertically: increase in the specifications of an individual resource 
+    disposable resources instead of fixed servers 
+        instantiating compute resources: automate setting up of new resources along with their configuration and code  
+        infrastructure as code: aws resources are programmable  
+    automation
+        serverless management and deployment: being serverless shifts your focus to automation of your code deployment 
+        infrastructure management and deployment: aws automatically handles details, such as resource provisioning, load balancing, auto scaling, and monitoring, so you can focus on resource deployment 
+        alarms and events: aws services will continously monitor your resources and initiate events when certain metrics or conditions are met   
+    loose coupling 
+        well defined interfaces: reduce interdependencies in a system by allowing various components to interact with each other only through specific technology agnostic interfaces such as restful apis  
+        service discovery: applications that are deployed as a set of smaller services should be able to be consumed without prior knowledge of their network topology details 
+        asynchronous integration: interacting components that do not need an immediate response and where an acknowledgement that a request has been registered will suffice, should integrate through an intermediate durable storage layer 
+        distributed systems best practices: build applications that handle component failure in a graceful manner 
+    services, not servers 
+        managed services: provide building blocks that developers can consume to power their applications, such as databases, machine learnign analytics, queueing, etc. 
+        serverless architectures: allow you to build both event driven and synchronous services without managing server infrastructure, which can reduce the operational complexity of running applications 
+    databases 
+        relational databases: provide a powerful query language, flexible indexing capabilities, strong integiry controls, and the ability to combine data from multiple tables in a fast and efficient manner 
+        nosql databases: trade some of the query and transaction capabilities of relational databases for a more flexible data model that seamlessly scales horizontally 
+            graph database: uses graph structures for queries  
+        data warehouses: specialized type of relational database, which is optimized for analysis and reporting of large amounts of data  
+    managing increasing volumes of data
+        data lake: architectural approach that allows you to store  
+    removing single points of failure 
+        redundancy 
+            standby redundancy: when a resource fails, functionality is recovered on a secondary resource with the failover process 
+            active redundancy: requests are distributed to multiple redundanct compute resources 
+        detect failure: use health checks and collect logs 
+        durable data storage 
+            synchronous replication: only acknowledges a transaction after it has been durably stored in both the primary storage and its replicas 
+            asynchronous replication: decouples the primary node from its replicas at the expense of introducing replication lag 
+            quorum based replication: combines synchronous and asynchronous replication by defining a minimum nubmer of nodes that must participate in a successful write opration 
+        automated multi data center resilience
+    optimize for cost 
+        right sizing: aws offers a broad range of resource types and configurations for many use cases 
+        elasticity: save money with aws by taking advantage of the platform's elasticity 
+        take advantage of the variety of purchasing options: e.g. reserved instances vs spot instances 
+    caching 
+        application data caching: store and retrieve information from fast, managed, in-memory caches  
+        edge caching: serve content by infrastructure that is closer to viewers, which lowers latency and gives high, sustained data transfer rates necessary to deliver large popular objects to end users at scale 
+    security 
+    cloud architecture best practices 
+aws well architected framework: disaster recovery 
+support plans 
+    basic 
+    developer 
+    business
+    enterprise 
+
+// LESSON 3 - AWS SERVICES 
+analytics: built to help you quickly extract data insight using the most appropriate tool for the job, and optimized to give you the best performance, scale, and cost for your needs
+    - athena, cloudsearch, aws data exchange, data pipeline, emr, finspace, glue, glue databrew, kinesis, lake formation, msk, opensearch service(elasticsearch), quicksight, redshift
+application integration: enable communication between decoupled components within microservices, distributed systems, and serverless applications
+    - appflow, eventbridge, managed apache airflow, mq, simple notification service, simple queue service, step functions, swf 
+ar and vr: easily create and run browser-based 3D, augmented reality (AR), and virtual reality (VR) applications
+    - sumerian
+aws cost management:  gives you the ability to access, organize, understand, control, and optimize your cloud-based costs and usage
+    - application cost profiler, budgets, cost explorer, marketplace subscriptions 
+blockchain: purpose-built tools to support your distinct needs, whether you need a centralized ledger database that maintains an immutable and cryptographically verifiable record of transactions, or a multi-party, fully managed blockchain network that helps eliminate intermediaries
+    - managed blockchain
+business applications: apps for managing your team's work with no coding
+    - alexa for business, chime, connect , honeycode, pinpoint, simple email service, workdocs, workmail
+compute: designed to make web-scale computing easier for developers
+    - app runner, batch, ec2, ec2 image builder, elastic beanstalk, lambda, lightsail, outposts, serverless application repository
+containers: highly scalable, fast container management service that makes it easy to run, stop, and manage containers on a cluster 
+    - elastic container registry, elastic container service, elastic kubernetes service, red hat openshift service
+customer enablement: augment your team’s cloud skills by delivering deep AWS expertise where, when, and how you need it 
+    - active for startups, iq, managed services, support 
+database: provide continuous monitoring, self-healing storage, and automated scaling to help you focus on application development
+    - documentdb, dynamodb, elasticache, keyspaces, memorydb for redis, neptune, qldf, rds, timestream  
+developer tools: set of services designed to enable developers and IT operations professionals practicing DevOps to rapidly and safely deliver software 
+    - cloud9, cloudshell, codeartifact, codebuild, codecommit, codedeploy, codepipeline, codestar, fis, x-ray 
+end user computing: provide secure access to the applications and desktops the workforce needs to get their job done
+    - appstream, worklink, workspaces
+frontend web and mobile: broad set of tools and services to support development workflows for native iOS/Android, React Native, and JavaScript developers
+    - amplify, appsync, devicefarm, location service
+game development:  provides backend feature tools for building, running, and scaling games 
+    - gamelift 
+internet of things: AWS offers Internet of Things (IoT) services and solutions to connect and manage billions of devices 
+    - freertos, iot 1-click, iot analytics, iot core, iot device defender, iot device management, iot events, iot fleetwise, iot greengrass, iot roborunner, iot sitewise, iot things graph, iot twinmaker  
+machine learning: allows a developer to discover patterns in end-user data through algorithms, construct mathematical models based on these patterns and then create and implement predictive applications 
+    - augmented ai, codeguru, comprehend, deepcomposer, deeplens, deepracer, devops guru, forecast, fraud detector, healthlake, kendra, lex, lookout for equipment, lookout for metrics, lookout for vision, monitron, panorama, personalize, polly, rekognition, sagemaker, textract, transcribe, translate 
+management and governance: built to manage highly dynamic cloud resources at massive scale 
+    - appconfig, auto scaling, chatbot, cloudformation, cloudtrail, cloudwatch, compute optimizer, config, control tower, grafana, incident manager, launch wizard, license manager, opswork, organizations, prometheus, proton, resilience hub, resources gorups and tag, service catalog, systems manager, trusted advisor, well architected tool   
+media services: to transport, prepare, process, and deliver live and on-demand content in the cloud
+    - elastic transcoder, elemental appliances and software, interactive video service, kinesis video streams, mediaconnect, mediaconvert, medialive, mediapackage, mediastore, mediatailor, nimble studio
+migration and transfer: to help migrate workloads from on-premises environments, hosting facilities, or other public clouds 
+    - application discovery service, application migration service, database migration service, datasync, mainframe modernization, migration hub, server migration service, snow family, transfer family   
+networking and content delivery: run applications with the highest level of reliability, security, and performance in the cloud 
+    - api gateway, app mesh, cloud map, cloudfront, direct connect, global accelerator, route 53, vpc, vpc ip address manager 
+quantum technologies: help speed up scientific research and software development for quantum computing 
+    - braket 
+robotics: service that makes it easy to develop, test, and deploy intelligent robotics applications at scale
+    - robomaker 
+satellite: lets you control satellite communications, downlink and process satellite data, and scale your satellite operations quickly, easily and cost-effectively without having to worry about building or managing your own ground station infrastructure
+    - ground station 
+security, identity, and compliance: help you protect your data, accounts, and workloads from unauthorized access
+    - artifact, audit manager, certificate manager, cloudhsm, cognito, detective, directory service, firewall manager, guardduty, iam, inspector, key management service, macie, network firewall, resource access manager, secrets manager, security hub, signer, single signon, waf and shield 
+storage: object storage with industry-leading scalability, availability, and security for you to store and retrieve any amount of data from anywhere
+    - backup, efs, elastic disaster recovery, fsx, s3, s3 glacier, storage gateway 
+
+// LESSON 3 - AWS SERVICES FOR DATA ENGINEERING 
+analytics 
+    athena: query in s3 using standard sql, pay only for the queries you run. 
+    emr: managed cluster platform that could run big data frameworks: hadoop, spark, etc. 
+    glue: data pipeline orchestrator | serverless etl service 
+        crawler: automatically infers schema from s3 then creates a table 
+        data catalog: tables created from crawler is stored in a metadata database called data catalog 
+    kinesis: fully managed streaming data service 
+        data streams: focuses on ingesting and storing data streams, and then, we write our custom applications to read data out of the stream 
+        data analytics 
+        firehose: focuses on delivering data streams to select destinations (s3, redshift, elasticsearch, etc.)
+    quicksight 
+    redshift 
+application integration 
+    managed workflow for apache airflow 
+    sns 
+    sqs 
+    step function 
+computing 
+    ec2 
+    lambda 
+cost management 
+    budgets 
+    cost explorer 
+management and governance 
+    cloudwatch 
+    organization
+    trusted advisor
+security, identity and compliance 
+    iam 
+storage 
+    s3 
+
+

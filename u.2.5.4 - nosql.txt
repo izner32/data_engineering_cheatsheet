@@ -24,7 +24,7 @@ document-based store
                 "obj2": 2,
             }
         }
-column-based store 
+wide-column-based store 
     definition 
         - pretty much like rdbms except much preferred for semi-structured/unstructured and big data 
         - stores information in columns, rather than in rows which is more usual with sql 

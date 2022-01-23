@@ -11,8 +11,8 @@ dbms architecture
             database (data) tier: db resides along with its query processing langauge 
 data models: defines how the logical structure of a database is modeled | there are more of these but we'll only focus with relational, entity-relationship and flat 
     entity-relationship data model(multiple tables - high level concept | conceptual): best used for the conceptual design of a database  
-        entities - tables
-        attribute - columns
+        entities - tables | can be object, person, class or place 
+        attribute - columns | something that describes an entity 
         relationships among entities: how entities is connected with other entities 
             - one to one 
             - one to many 
@@ -105,7 +105,7 @@ normalization: method to remove all these anomalies(update, delete, insert anoma
         - if there is no transitive dependency for non-prime attributes, then the relation must be in third normal form already 
     
         transitive dependency: when a non key attribute determines another attribute | when a non prime key column value can be guessed or taken from other non key column | e.g. if we know the book then we know the author 
-    BCNF(4NF)
+    BCNF(4NF): no column should depend on other column
         - normalization form at this point and above is rarely used 
         - advance version of 3NF
     5NF 
@@ -139,3 +139,32 @@ deadlock
         - now, the main problem arises. Transaction T1 will wait for transaction T2 to give up the lock, and similarly, transaction T2 will wait for transaction T1 to give up the lock. As a consequence, All activity comes to a halt and remains at a standstill forever unless the DBMS detects the deadlock and aborts one of the transactions. 
 
 // UNFINISHED - LESSON 1.8 - BACKUP AND RECOVERY 
+
+// LESSON 1.9 - CAP THEOREM 
+CAP - Consistency, Availability, Partition Tolerance 
+- it is not possible to guarantee all three of the desirable properties at the same time in a distributed system with data replication 
+- theorem states that networked shared data system can only strong support two of the following three properties 
+- CAP and ACID do not refer to the same identical concept 
+Consistency 
+    - nodes will have the same copies of a replicated data item visible for various transaction 
+Availability 
+    - each read or write request for a data item will either be processedd successfully or will receive a message that the operation cannot be completed
+Partition Tolerant 
+    - means that the system can continue operating if the network connecting the nodes has a fault that results in two or more partitions 
+
+// LESSON X.1 - OTHER DATABASE TERMS 
+DATABASE - collection of relations 
+DATAFRAME - labeled data structure just like a json, or an object in js or a dict in python 
+RELATIONS - multiple tables are connected to each other 
+TABLE - collection of columns 
+COLUMNS - collection of individual fields/attribute 
+FIELD - single individual column  it describes a particular cell found on any row  
+ATTRIBUTE - single individual value in a column that describes an entity 
+    PRIME ATTRIBUTE - unique value 
+    NON-PRIME ATTRIBUTE - not unique value 
+ROWS - data object 
+TUPLE - one record/row 
+RECORD - just like tuple, row 
+ENTITIY - single row | in er diagram entity is the table
+DATA - individual cell data 
+SCHEMA - like a format on how a columns datatype on a table should look like 

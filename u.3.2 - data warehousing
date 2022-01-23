@@ -1,0 +1,185 @@
+// LESSON 1 - DATA WAREHOUSING CONCEPTS 
+data warehouse 
+    - built on top of a database 
+    - data inside data warehouse comes from elsewhere 
+        - possibly dozens of data sources 
+        - data are copied into data warehouse, not moved 
+why data warehouse 
+    - for making data driven decisions  
+    - one stop shop: the data that we need is all in a single location rather than scattered among oltp database 
+rules of data warehousing by bill inmon (1990)
+    - integrated: data from a number of different sources are sent into a data warehouse 
+    - subject oriented: data is organized by subject 
+    - time variant: data warehouses contain historical data not just current data 
+    - non volatile: diba we periodically load data into data warehouse (batch processing), between the time of the last load and the next one, the data warehouse stays as is
+data warehouse vs data lake vs data virtualization 
+    data warehouse: if incoming data is not big data then you could skip data lake 
+        - often built in an rdbms (relational database management system)
+        - sometimes built in an mdbms (multidimensional database management system)
+    data lake: can use data lake first before data warehouse if the incoming data qualifies for big data  
+        - built on a big data environment rather than a traditional rdbms 
+        - big data (key to understanding how we can measure big data and just how different big data is to old fasioned data)
+            - volume: volumes or size of data 
+            - velocity: growth of data  
+            - variety: contains different format such as excel, csv, and nontraditionals like video, text, pdf, etc. 
+    data virtualization 
+
+// LESSON 2 - DATA WAREHOUSING ARCHITECTURE 
+architecture concepts 
+    dw architectures
+        centralized data warehouse: using a single database as the home for your data to support business intelligence and analytics  
+        independent data mart: small scale version of data warehouse 
+        component based data warehousing: opposite of centralized dw, composed of data warehouse and dependent data mart operating together
+    optionals to a data warehousing architecture 
+        cube: specialized type of database 
+        operational data store: variation of data warehouse that you may want to consider on your overall architecture 
+        staging layer: segment of the data warehouse into which data initially gets loaded before the data is transformed 
+            persistent 
+            non persistent  
+data warehouse environment 
+    centralized data warehouse
+        - using a single database as the home for your data to support business intelligence and analytics 
+        - one stop shopping: every data that we need is all in here 
+        - architecture: source -> etl -> data warehouse -> analytics 
+    independent data mart 
+        - you could think of it as a small scale data warehouse 
+        - data mart represent a subject or topic then analytics is performed from those data marts 
+        - architecture: source -> etl -> data marts -> analytics 
+    component based data warehouse 
+        - opposite of centralized data warehouse 
+        - consist of data warehouse and data marts
+        - architecture(top down): source -> etl -> data warehouse -> etl -> data marts -> analytics 
+        - architecture(bottom up): source -> etl -> data marts -> analytics
+                                                               -> etl -> data warehouse -> analytics 
+optionals to a data warehouse environment 
+    cube 
+        - multidimensional database management system/mdbms, obviously not rdbms 
+        - specialized "dimensionally-aware" database 
+        - best for smaller scale data warehouses, data marts 
+        - sometimes cubes and rdbms go hand in hand 
+            - e.g. data warehouse - rdbms, data marts - mdbms 
+            - e.g. data warehouse - rdbms, data mart 1 - rdbms, data mart 2 and remaining marts - mdbms 
+        - application in architecture(example): source -> etl -> data warehouse(built on top of mdbms)
+    operational data store 
+        - less popular today because or reduced latency in our data processing (everything's basically much faster now)
+        - only contains the current data unlike in data warehouse where it contains the current and historical data 
+        - updated frequently
+        - application in architecture(option 1): source -> rapid etl -> ods 
+                                                        -> batch etl -> data warehouse 
+        - application in architecture(option 2): source -> rapid etl -> ods -> batch etl -> data warehouse 
+    staging layer 
+        - landing zone for the incoming data 
+            - why? because if there would be error in the data ingestion we don't have to extract from the start again 
+        - a data lake(raw zone), data warehouse all have staging layer 
+        type of staging layer 
+            persistent
+                - data are not removed once it is copied into the next layer  
+            non persistent  
+                - data are removed once it is copied into the next layer 
+choosing a datawarehouse architecture flow 
+    centralized approach                                                           
+        edw          
+            relational  
+            specialized    
+        data lake     
+            specialized    
+            hadoop   
+            aws s3,etc.
+    component based approach
+        architected 
+            dw then dm(top down)      
+            dm then dw(bottom up)      
+            dm only 
+                dw bus 
+        non architected 
+            federated edw 
+
+// LESSON 3 - BRINGING DATA TO YOUR DATA WAREHOUSE/DATA LAKE 
+etl 
+    - extract, transform, load 
+    - acronym used for data warehousing 
+    - schema on write: schema must exist before loading it into data warehouse 
+
+    type of etl 
+        initial etl(full etl) 
+            - normally one time etl only 
+            - right before the data warehouse goes live 
+            - redo the intial etl if data warehouse "blows up"(get corrupted, etc.)
+        incremental etl 
+            - incrementally or continously refreshed the data warehouse 
+            
+            four major incremental etl patterns 
+                - append (common)
+                - in place update (common)
+                - complete replacement 
+                - rolling append 
+            flavors of incremental load 
+                - stream data load: load data in real time 
+                - batch data load: load data in time interval 
+elt 
+    - extract, load, transform 
+    - acronym used for data lake 
+    - schema on read: schema would exist after loading it into data lake 
+transformation (common transformation you'll be doing): data transformation main goal - uniformity across the whole data warehouse 
+    - data value, data type, data size unification 
+        e.g. table 1 has value of great, and not great for column_name while table 2 has value of g and ng for column_name, what we'll be doing is only pick from one of them what would be the value for both tables - either (g and ng) or (great and not great)
+    - de-duplication: prevent duplication 
+        e.g. table 1(students) and table 2(students) both have an intersecting students (meaning one student is both in table), when you start unifying the data from both table then make sure to only put the intersected student once 
+    - dropping columns (vertical slicing): remove unneccesary columns - columns we don't need for our analytical purposes 
+    - value based row filtering (horizontal slicing): remove unnecessary rows - rows we don't need 
+    - correcting known errors: if you intuitively know there is an error then fix it for god's sake  
+    - fixing null and empty values (if ever they do need some fixing)
+
+// LESSON 4 - DATA WAREHOUSING DESIGN: BUILDING BLOCKS | data modeling focus - dimensional 
+making data driven decisions 
+    - one or more measurements 
+        - facts 
+        - something quantifiable 
+        - e.g. annual faculty salary 
+    - dimensional context for each measurement 
+        - dimension 
+        - e.g. by rank, by department, by academic year 
+        - e.g. $6000 - payment is not enough dimensional context 
+bringing dimensional context to our measurement 
+    dimensional context in wordings: almost always this happen  
+        by: "sliced and grouped" by values of the entire dimension 
+        for: one or more specific values from within the entire dimension 
+    typical dimensional insight 
+        - what is the average annual faculty salary(measurement) by(look, it's a by!) rank, by department, by academic year?
+        - what is the average student loan balance(measurement) by major(dimensional), by class year, by campus? 
+        - what is the average annual faculty salary(measurement) for assistant professors, by department, by academic year 
+        - what is the average student loan balance for engineering majors, by clas year, by campus 
+dimensional modeling 
+    facts 
+        - numeric and quantifiable 
+        - measurement 
+        - fact is not the same as a fact table, but obviously we store our fact in a fact table 
+        - not the same as logical fact | e.g. of logical fact - i am now writing 
+        examples 
+            - salary 
+            - number of credits a student is taking in a semester 
+            - dollar amount 
+            - number of years 
+        type of fact 
+            additive
+                - a measurement you could add 
+                - e.g. faculy member's salary | you could add all of the faculty member salary and you'd come up with a good analysis 
+                - e.g. a student's credit hours completed 
+            non-additive 
+                - a measurement you could not add because adding them provides nonsensical information 
+                - e.g. gpa of student | it's nonsense to add up all of the students gpa 
+                - typical example: margins, ratios, percentages, calculated average (e.g. gpa)
+            semi-additive 
+                - a measurement where sometimes you can add and sometimes not 
+                - typically used in periodic snapshot fact tables 
+    dimension 
+        - context for a fact 
+        - dim is not the same as a dim table, but obviously we store our dim in a dim table 
+        examples 
+            - academic department 
+            - major 
+            - student 
+            - employee 
+schemas 
+    star 
+    snowflake 
